@@ -323,8 +323,8 @@ Similarly, for all other operations:
 
 ### Increment and Decrement
 We can shorten `a += 1` down even further by rewriting it as either:
-1. `a++`	pre-increment (evaluated **before** the rest of the expression)
-2. `++a`	post-increment (evaluated **after** the rest of the expression)
+1. `++a`	pre-increment (evaluated **before** the rest of the expression)
+2. `a++`	post-increment (evaluated **after** the rest of the expression)
 
 Similarly, `a -= 1` can be rewritten as either `a--` or `--a`;
 
