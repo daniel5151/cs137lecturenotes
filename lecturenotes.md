@@ -1,6 +1,18 @@
+# 
 <h1 style="text-align: center">CS-137 Programming Principles</h1>
 <h1 style="text-align: center">Notes by Daniel Prilik</h1>
 <h1 style="text-align: center">Software Engineering Class of 2020</h1>
+
+## A note about these notes
+They aren't *amazing,* but they are pretty solid.
+I *may* have missed a thing or two here and there, but i've tried not to miss any super important key concepts.
+Also, brace yourself if you hate spelling errors. There are going to be *quite* a few (probably).
+
+These note do not have any program flow diagrams, partly because I didn't find them useful, but mostly because it would be a pain to actually write in markdown.
+
+One last disclaimer: I give you no guarantees that these notes are accurate, so use them at your own risk.
+
+That said, enjoy!
 
 ## Office Hours
 **12:30 - 1:30 pm** on Wednesdays
@@ -10,6 +22,8 @@
 ***Table of Contents:***
 
 <!--Insert Table of Contents below...-->
+
+[TOC]
 
 * * * *
 
@@ -630,7 +644,7 @@ If we define this function in a program, we can then write something like this:
 ## Lecture 7
 Sept 28th
 
-### We did jack shit
+### Nothing important hopefully...
 
 ## Lecture 8
 Sept 29th
@@ -1032,14 +1046,6 @@ Smarter to rewrite it as:
 ## Lecture 13
 Oct. 9th
 
-### Topics covered on the midterm
-* Basics: Variables, Expressions, Loops, Conditionals
-* Ints, Doubles
-* Functions (function pointers)
-* Arrays
-* Math.h
-* Algorithms: Euclid's, Horner's, Bisection
-
 ### Polynomials
 You can represent polynomials as an array of coefficients.
 Ex: $$$f(x) = 3x^3 +4x^2+6$$$ can be represented as  `double f[] = {3,4,0,6}`
@@ -1047,6 +1053,7 @@ Ex: $$$f(x) = 3x^3 +4x^2+6$$$ can be represented as  `double f[] = {3,4,0,6}`
 Evaluating the polynomial is also pretty easy:
 
 ####*poly.c*
+
 ```
     #include <stdio.h>
     #include <assert.h>
@@ -1284,6 +1291,14 @@ We can use this property to generalize `bisect()` to work with any function:
         printf("%g\n", bisect(-10, +10, 0.001, 100000, f1));
     }
 ```
+
+## Topics covered on the midterm
+* Basics: Variables, Expressions, Loops, Conditionals
+* Ints, Doubles
+* Functions (function pointers)
+* Arrays
+* Math.h
+* Algorithms: Euclid's, Horner's, Bisection
 
 ## Lecture 15
 Oct 16th
