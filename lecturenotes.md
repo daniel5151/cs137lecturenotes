@@ -23,8 +23,6 @@ That said, enjoy!
 
 <!--Insert Table of Contents below...-->
 
-[TOC]
-
 * * * *
 
 ## Lecture 1
@@ -1378,3 +1376,187 @@ Sidenote: When defining a structure, you can specify fields to initialize by nam
 
 eg: `tod later = {.minutes = 60}` makes `tod={0,60}`
 eg: `int a[6] = {[4]=1, [1]=2}` makes `{0,2,0,0,1,0}`
+
+## Lecture 16
+Oct 26th
+
+### Complex Numbers
+Before programming with complex numbers, we must first understand what complex numbers actually are.
+Complex Numbers are numbers that have the following format:
+$$
+	x + yi
+$$
+Where $$$ i=\sqrt{-1} $$$ or  $$$ i^2 = -1 $$$.
+
+As youcan see, complex numbers consist of two components:
+- $$$ x $$$ is the **real** component.
+- $$$ yi $$$ is the **imaginary** component
+
+Here are the various operations we can do with complex numbers:
+- Addition: $$$ (x+yi) + (w + zi) = (x + w) + (y+z)i $$$
+- Multiplication: $$$ (x+yi)(w + zi) = (xw - yz) + (xz + yw)i $$$
+
+### Complex Numbers in C89
+While C99 added a complex numbers library, C89 does not have one, so programmers had to write their own implementation.
+Let's write our own implementation. Why? Because.
+
+#### *cplex.h*
+```
+	#ifndef CPLEX.H
+    #define CPLEX.H
+
+        // Define the Complex Number struct
+        typedef struct {
+        	double r;
+            double i;
+        } cplex;
+
+        // Declare functions to work with cplex structs
+        cplex cplexConstruct(double r, double i);
+        cplex cplexAdd(cplex a, cplex b);
+        cplex cplexMult(cplex a, cplex b);
+        void cplexPrint(cplex a);
+
+    #endif
+```
+
+#### *cplex.c*
+```
+    #include <stdio.h>
+
+    #include "cplex.h"
+
+    cplex cplexConstruct(double r, double i) {
+        return (cplex) {.r = r, .i = i};
+    }
+    void cplexPrint (cplex a) {
+        printf("%g + %gi\n", a.r, a.i);
+    }
+
+    cplex cplexAdd(cplex a, cplex b) {
+        return (cplex) {
+            .r = a.r + b.r,
+            .i = a.i + b.i
+        };
+    }
+    cplex cplexMult(cplex a, cplex b) {
+        return (cplex) {
+            .r = a.r * b.r - a.i * b.i,
+            .i = a.r * b.i + a.i * b.r
+        };
+    }
+```
+
+#### *cplexMain.c*
+```
+	#include "cplex.h"
+
+    int main () {
+        cplex a = cplexConstruct(1,2);
+        cplex b = cplexConstruct(3,4);
+
+        cplex c = cplexAdd(a,b);
+
+        cplexPrint(c);
+
+        c = cplexMult(a,b);
+
+        cplexPrint(c);
+
+        return 0;
+    }
+```
+
+Ah, another important note:
+`if (a == b)` is **NOT** a valid way to check equality between two structs!
+
+### Complex Numbers in C99+
+**TL;DR**: It's better.
+
+#### *cplexMain.c*
+```
+	#include <complex.h>
+    #include <stdio.h>
+
+    void main () {
+    	double complex a = 1 + 2*I;
+        double complex b = 3 + 4*I;
+
+        double complex c = a + b;
+
+		printf("%g + %gi\n", creal(c), cimag(c));
+
+        c = a * b;
+
+        printf("%g + %gi\n", creal(c), cimag(c));
+
+        return 0;
+    }
+```
+
+## Lecture 17
+Oct 28th
+
+### Pagerank
+How does Google figure out what you're looking for?
+Well, they use a variety of variables:
+* content of webpages (anchor text mainly)
+* user behavior
+* webpage rank (which is static)
+
+That last one is what we want to focus on.
+
+**Pagerank** is a *static* list of webpages.
+It is sorted by how "good" the website is.
+
+The rank of a website, i.e: how "good" it is, is determined by how many other websites link to the webpage (logic being that a good website would be reffered to my many other websites).
+
+How does Google build this Pagerank listing?
+
+They might use the **Random Surfer Model**.
+This is how it works:
+* pretend you are surfing randomly
+* at each step, you either:
+	* follow a link (probability $$$ \delta $$$) OR
+	* Jump to a random page (probability $$$ 1-\delta $$$)
+* The Pagerank of a page Q, R(Q), is the probability that you are on page Q after surfing for a long time.
+
+R(Q) is calculated accoring to the following formula:
+$$
+	R(Q) = \frac{1-\delta}{N} + \delta\sum\limits_{P \rightarrow Q} \frac{R(P)}{out(P)}
+$$
+Where: 
+* $$$ N $$$ is the Total Number of Pages.
+* $$$ \sum\limits_{P \rightarrow Q} $$$ is the sum of all pages pointing to Q
+* $$$ R(P) $$$ Pagerank of page linking to Q
+* $$$ out(P) $$$ Pagerank of page linked from Q
+
+Let's take an example of a simple web:
+* X links to Y and Z, and is linked to by Y
+* Y links to X, and is linked to by Y and Z
+* Z links to Y, and is linked to by X
+
+$$
+	R(X) = \frac{1-\delta}{N} + \delta \frac{R(Y)}{1}\\
+    R(Y) = \frac{1-\delta}{N} + \delta (\frac{R(X)}{2} + R(Z))\\
+    R(Z) = \frac{1-\delta}{N} + \delta \frac{R(X)}{2}
+$$
+
+If $$$ \delta = 80\% = \frac{4}{5} $$$ Thus $$$ \frac{1-\delta}{N} = \frac{1}{15} $$$
+
+We can then solve a system of linear equations to find X, Y, and Z.
+But I'm not going to solve those by hand, no, that would be too easy...
+
+Let's use our old friend **fixed-point iteration!**
+
+* Let our **initial guess** be that $$$ x = y = z = 0.333... $$$
+	* new $$$ x = \frac{1}{15} +  \frac{4}{5}(y=0.333...) $$$
+	* new $$$ y = \frac{1}{15} +  \frac{2}{5}(x=0.333...) + \frac{4}{5}(z=0.333...) $$$
+	* new $$$ z = \frac{1}{15} +  \frac{2}{5}(x=0.333...) $$$
+* Repeat ad-nauseum intill we get a good answer.
+
+After 20 iterations: $$$ x = 0.383, y = 0.396, z = 0.220 $$$
+
+For the whole web, this would take *thousands* of iterations.
+
+## Lecture 18
