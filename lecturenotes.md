@@ -1536,15 +1536,15 @@ Let's take an example of a simple web:
 * Y links to X, and is linked to by Y and Z
 * Z links to Y, and is linked to by X
 
-$$
+$$$
 	R(X) = \frac{1-\delta}{N} + \delta \frac{R(Y)}{1}\\
     R(Y) = \frac{1-\delta}{N} + \delta (\frac{R(X)}{2} + R(Z))\\
     R(Z) = \frac{1-\delta}{N} + \delta \frac{R(X)}{2}
-$$
+$$$
 
 If $$$ \delta = 80\% = \frac{4}{5} $$$ Thus $$$ \frac{1-\delta}{N} = \frac{1}{15} $$$
 
-We can then solve a system of linear equations to find X, Y, and Z.
+We can then solve a system of **linear equations** to find X, Y, and Z.
 But I'm not going to solve those by hand, no, that would be too easy...
 
 Let's use our old friend **fixed-point iteration!**
@@ -1559,4 +1559,89 @@ After 20 iterations: $$$ x = 0.383, y = 0.396, z = 0.220 $$$
 
 For the whole web, this would take *thousands* of iterations.
 
+Sidenote: FPI doesn't always converege, but it usually does, so that's good.
+
 ## Lecture 18
+Oct 30th
+
+### Caveats of FPI in computing pagerank
+Take an example of the following web:
+* X link to Y and Z
+* Y links to Z, and is linked to by X
+* Z is linked to by X and Y
+
+Note that Z is a **sink**, i.e: it does not link to any pages at all
+
+Writing out the equations for pagerank results in the following:
+$$$
+	\delta = \frac{4}{5}\\
+	R(X) = \frac{1-\delta}{N} = \frac{1}{15}\\
+    R(Y) = \frac{1-\delta}{N} + \delta \frac{R(X)}{out(X)} = \frac{1}{15}+\frac{4}{5}\frac{R(X)}{2}\\
+    R(Z) = \frac{1-\delta}{N} + \delta \frac{R(X)}{out(X)} + \delta \frac{R(Y)}{out(Y)} = \frac{1}{15}+\frac{4}{5}\frac{R(X)}{2} + \frac{4R(Y)}{5}\\
+$$$
+
+This is problematic as it "removes" probability from the web.
+
+### Representing the Web as an Arary of Structs
+Let's define the web as used in Lecture 17 Part 1 in C.
+
+First, we define a struct for each link:
+```
+	typedef struct {
+    	int src, dst;
+    } link;
+```
+
+Now, we can make an Array of Links to represent the web:
+```
+	link l[] = {
+    	{0,1}, {0,2},   // page X
+        {1,0},          // page Y
+        {2,1}           // page Z
+    }
+```
+
+Lets write a program to solve the system of equations!
+
+#### *pagerank.c*
+```
+	#include <stdio.h>
+
+    typedef struct {
+        int src, dst;
+    } link;
+
+    // it may not be super efficient with loops
+    // but it's readable and comprehensible
+    void pagerank (link l[], int n_link, double r[], int n_page, double delta, int n_iter){
+        double s[n_page];   // holds a temp copy of the new ranks
+        int out[n_page];    // out(P)
+
+        for (int i = 0; i < n_page; i++) out[i] = 0;
+        for (int j = 0; j < n_link; j++) out[l[j].src]++;
+
+        // initial guess
+        for (int i = 0; i < n_page; i++) r[i] = 1.0 / n_page;
+
+        // fixed-point iteration implementation
+        for (int k = 0; k < n_iter; k++) {
+            for (int i = 0; i < n_page; i++) s[i] = (1.0 - delta) / n_page;
+            for (int j = 0; j < n_link; j++) 
+            	s[l[j].dst] += (r[l[j].src]/out[l[j].src])*delta;
+
+            //copy s to r
+            for (int i = 0; i < n_page; i++) r[i] = s[i]; 
+        }
+    }
+
+    void main () {
+        link l[] = {{0,1},{0,2},{1,0},{2,1}};
+        double r[3];
+        pagerank(l, sizeof(l)/sizeof(l[0]), r, 3, 0.80, 20);
+        for (int i = 0; i < 3; i++) printf("%g\n", r[i]);
+    }
+```
+
+Do note that for the real WWW, n_iter is probably going to be in the 100's to 1000's.
+
+## Lecture 19
