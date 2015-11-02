@@ -1645,3 +1645,144 @@ Lets write a program to solve the system of equations!
 Do note that for the real WWW, n_iter is probably going to be in the 100's to 1000's.
 
 ## Lecture 19
+November 2nd
+
+### Pointers
+What the hell is a pointer?
+
+Well, it's a variable that "points" to location in memory that has a certain data type.
+But that's technical mumbo jumbo, what does it actually mean?
+
+When we write `int i = 6;`, we tell C to allocate a 8 bit chunk of memory to store the value of 6, and to label that location in memory with the variable i.
+So, when we then write `i = 4`, C knows what memory location i reffers to, and changes the value in that memory block to 4.
+
+Now, what if we write `int *p;`
+The hell is that asterisk doing there?
+Well, this asterisk specifies that the variable being declared is a special type of variable, a **pointer**
+The variable p does not itself contain an integer, but instead, it contains the location of a memory adress where an integer resides.
+Initially, `p` does not point to any specific location, and accesing it without setting a pointee is very dangerous.
+
+Say we want to tell `*p` to point to `i`'s location in memory.
+We write `p = &i`, where `&` **references** i, that is, it returns not the value at I, but `i`'s actual memory adress.
+
+Now that `p` points to the memory location of i, we can use `*p = 10` to chnge the value of `i` to `10`! That `*` **derefrences** the memory location that `p` contains.
+
+That's the gist of it, let's see an example:
+```
+	int i = 6;
+    int *p;
+
+    p = &i;
+    *p = 10;
+
+    printf("%d \n", i);  // 10
+
+    int *q;
+    q = p;
+    *q = 17;
+
+    printf("%d \n", i);  // 17
+```
+Notice that multiple pointers can point to the same adress in memory!
+
+Alright, that's neat and all, but why are pointers *useful*?
+
+Well, if you pass pointers to a function, that function is able to modify variables **outside of it's scope!**
+
+Take the following example:
+
+#### *swap.c*
+```
+	#include <stdio.h>
+
+    void swap(int *p, int *q) {  // takes memory locations and derefs them
+    	int temp = *p;
+        *p = *q;
+        *q = temp;
+    }
+
+    void main () {
+    	int i = 0; j = 2;
+        swap(&i, &j);            // passing the memory locaiton of i and j
+        printf("%d %d\n", i, j);
+    }
+```
+
+SIDENOTE: There is a one line version of swap put forth by our resident genius:
+`if (x!=y) *x = *x ^ *y ^ (*y = *x);`
+How does this work? Good question. XOR's apparently. I dunno, I just wrote it down.
+
+Alright, what else can pointers be used for?
+Well, we can have functions that return pointers.
+Here is an example:
+
+#### *largest.c*
+```
+	#include <stdio.h>
+
+    int *largest(int a[], int n) {
+    	int m = 0;
+        for (int i = 1; i < n; i++) {
+        	if (a[i]>a[m]) m = i;
+        }
+        return a + m;   // or return &(a[m]);
+    }
+
+	void main () {
+    	int test[] = {0,1,2,3,4,3,2,1,0};
+        int *p = largest(test, sizeof(test)/sizeof(test[0]));
+        printf("%d\n", test[*p]);
+    }
+```
+You might be wondering, what the hell is `return a + m`? Well, it's an example of...
+
+### Pointer arithmentic
+There are a few different arithmetic operations we can preform on pointers:
+* We can add an `int` to a pointer
+* We can subtract and `int` from a pointer
+* We can subtract pointers from one another (so long as they are the same type)
+
+Example:
+```
+	int a[8] = {2,3,4,5,6,7,8,9};
+    int *p, *p, *q, i;
+
+    p = &(a[2]); // p points to a[2]
+    q = p + 3;   // q points to a[5]
+    p += 3;      // p points to a[5]
+    p = q - 3    // p points to a[2]
+    i = q - p;   // i = 3
+    i = p - q;   // i = -3
+```
+
+We can also compare pointers using all the usual relational operators `>` `<` `==`, etc.
+
+Here is an example that heavily employs pointer arithmetic:
+#### *sumarray.c*
+```
+	int sum (int a[], int n) {
+    	int total = 0;
+        for (int i = 0; i < n; i ++)  // OR: for (int *p = a; p < a + n; p++)
+        	total += *(a + i);        //         total += *p; 
+        return total;
+    }
+```
+Neat.
+
+Now, here's something to challenge your brain a bit...
+
+### ksplice pointer challenge
+What does this code print out?
+(assuming x points to memadress 100, and an int is length 4)
+```
+	$include <stdio.h>
+    void main() {
+    	int x[5];
+        printf("%p\n" x);       // 100
+        printf("%p\n" x + 1);   // 104
+        printf("%p\n" &x);      // 100 (because apparently x == &x)
+        printf("%p\n" &x + 1);  // 120 (because int (*x)[5] + 1)
+    }
+```
+
+## Lecture 20
