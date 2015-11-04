@@ -1786,3 +1786,106 @@ What does this code print out?
 ```
 
 ## Lecture 20
+Nov 4th
+
+### Characters
+C stores characters in `char` variables, 1 byte signed integers.
+C uses the **ASCII** system for converting between these integers and characters.
+
+ASCII is:
+* A 7-bit code for repeating characters
+* 0000000-1111111 Means that an ASCII char has 128 possible values
+* ASCII is divided into a few char "groups"
+	* 00 - 31: Control Characters
+	* 48 - 57: digits '0' to '9'
+	* 65 - 90: letters 'A' to 'Z'
+	* 97 - 122: letters 'a' - 'z'
+
+*NOTE*: A full ASCII table is available in a multitude of places online
+
+In C, we can represent characters as their integer counterparts by enclosing the char in single appostrophes.
+
+Here is a sample piece of code to show off some properties of chars:
+```
+	char c = 'a'     // 97
+    c = 65           // 'A'
+    c += 2           // 'C'
+    c += 32          // 'c'
+    c = '\n'         // newline char
+    c = '\0'         // null character
+```
+
+Now, ASCII worked fine when all computers had to represent was English, but as time went on, and the world became globalized,the world needed a system that would support *all* the characters out there from *all* languages, so that anyone could communicate with everyone. That's why we now have...
+
+### Unicode
+Unicode assigns "codepoints" to over *100000 characters* from many languages (both living and dead, even pretend!).
+A unicode character spans 21 bits, and has a range [0, 2^21^ - 1], or 3 bytes per character.
+
+Eg: The mandarin character 'sun' has the unicode `26085`~10~ or `U+65E5` in Hex
+
+An awesome thing about Unicode is that it shares data values with ASCII!
+Unicode 'a' is `97`~10~ = `U+0061` = `110 0001`~2~, which is the same as ASCII
+
+The unicode spec jsut defines the *codes* for each characters, there are still different ways to actually *encode* unicode.
+Popular specs include: UTF-8, UTF-16, UTF-32, UCS-2
+
+But by far the most popular and best supported one is UTF-8
+
+### UTF-8 - Unicode Transformation Format
+UTF-8 is a **Variable Length** unicode representation, and is also **backwards compatible** with traditional ASCII
+
+- 1-byte characters, i.e: codepoints 0-127, are ASCII chars
+- 2-byte characters are up to 11 bits long, with a range [128, 2^11^ - 1 (i.e 2047)]
+- 3-byte characters are up to 16 bits long, with a range [2048, 2^16^ - 1 (i.e 65535)]
+- 4-byte characters are up to 21 bits long, with a range [65536, 2^21^ - 1 (i.e: 2097151)]
+Bits | Codepoint                  | UTF-8
+---- | -------------------------- | -------------------------------------
+ 1   | `XXX XXXX`                 | `0XXX XXX`
+ 2   | `XXXXX YYYYYY`             | `110XXXXX 10YYYYYY`
+ 3   | `XXXX YYYYYY ZZZZZZ`       | `1110XXX 10YYYYYY 10XXXXXX`
+ 4   | `XXX YYYYYY ZZZZZZ WWWWWW` | `11110XXX 10YYYYYY 10ZZZZZZ 10WWWWWW`
+
+Eg. That 'sun' character from before with code `26085`~10~ has the 3 bit UTF-8 encoding 
+`1110 0110 10 010111 10 100101`
+
+### Unicode in C
+Starting with C99, C has a standard library for working with Unicode.
+`#include <wchar.h>` is what you have to use.
+You can read up about it on the internet, / on textbook page 650
+
+**NOTE:** In this course, we will be using ASCII for everything. Unicode is just good to know!
+
+Now, for something completely different:
+
+### More about Pointers
+Pointers can be **Null pointers**, or a pointer to nothing.
+We can make a null pointer by casting 0 to a pointer like so: `(void*)0`
+So, to make a `int*` null pointer, we do `int *p = (int*)0;`
+It works similarly, for doubles and structs.
+
+**NOTE:** The cast is actually optional! `int *p = 0;` is also valid!
+
+### Dynamic Storage
+To use any of the following functions, you must `#include <stdlib.h>`.
+
+stdlib.h defines the following function: `void *malloc(size_t size)`
+`malloc` returns a pointer to a block of *size* bytes of memory
+
+`void free(void *p)` is `malloc`'s inverse.
+`free` releases the memory allocated by `malloc`
+**NOT FREEING MEMORY WILL LEAD TO MEMORY LEAKS, WHICH ARE BAD**
+
+How are these functions useful?
+Well, let's look at an example:
+```
+	#include <stdlib.h>
+    int *numbers(int n) {
+    	int *p = (int *)malloc(n * sizeof (int));
+        for (int i = 0; i < n; i++)
+        	p[i] = i + 1;
+        return p;
+    }
+```
+This little function returns a pointer to an array filled with a range of numbers [0,n]
+
+## Lecture 21
