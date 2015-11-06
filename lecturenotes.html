@@ -2117,7 +2117,150 @@ x = 338, y = 130 \\
             p[i] = i + 1;
         return p;
     }
-</code></pre><p>This little function returns a pointer to an array filled with a range of numbers [0,n]</p><h2 id="lecture-21"><a name="lecture-21" href="#lecture-21"></a>Lecture 21</h2>
+</code></pre><p>This little function returns a pointer to an array filled with a range of numbers [0,n]</p><h2 id="lecture-21"><a name="lecture-21" href="#lecture-21"></a>Lecture 21</h2><p>Nov 6th</p><h3 id="dynamic-storage-continued"><a name="dynamic-storage-continued" href="#dynamic-storage-continued"></a>Dynamic Storage Continued</h3><p>Let’s actually call <code>numbers()</code> from a main:</p><pre><code data-origin="<pre><code>    void main () {
+        int *q = numbers(100);
+        printf(&quot;%d\n&quot;, q[50]); // Outputs 51
+        free(q);
+    }
+</code></pre>">    void main () {
+        int *q = numbers(100);
+        printf("%d\n", q[50]); // Outputs 51
+        free(q);
+    }
+</code></pre><h3 id="strings"><a name="strings" href="#strings"></a>Strings</h3><p>How does C handle strings?<br>Well, simply put, a string in C is just an <strong>array of <code>char</code>s</strong> that is <strong>terminated by a null character (‘\0’)</strong>.</p><p>We can define strings in a few ways:<br>1) <code>char s[] = "hello";</code><br>2) <code>char s[] = {'h','e','l','l','o','\0'};</code><br>3) <code>char *s = "hello";</code></p><p>Each of these is equally valid (although 2 is usually not used).</p><h3 id="string-manipulations-in-c"><a name="string-manipulations-in-c" href="#string-manipulations-in-c"></a>String manipulations in C</h3><p>Unlike high level languages, C has pretty bad built in string manipulation.<br>And by bad, I mean it doesn’t have any.<br>If you want to modify a string in some way, you have to manually write a function that will do an operation you like (or use a library like <code>&lt;string.h&gt;</code>).</p><p>As an example, let’s write a function that counts how many times a given character <code>c</code> occurs in a string <code>s</code></p><h4 id="*c_count.c*"><a name="*c_count.c*" href="#*c_count.c*"></a><em>c_count.c</em></h4><pre><code data-origin="<pre><code>    #include &amp;lt;stdio.h&amp;gt;
+
+    int count(char *s, char c) {
+        int count = 0;
+        for (int i = 0; s[i] != '\0'; i++) {
+            if (s[i] == c) count++;
+        }
+        return count;
+    }
+
+    //// you can also rewrite the for loop with pointers
+    // for (char *p = sl *p != '\0'; p++) {
+    //     if (*p == c) count++;
+    // }
+
+    void main() {
+        char *hi = &quot;Hello world!&quot;;
+        printf(&quot;%d\n&quot;,count(hi,'l')); // 3
+        printf(&quot;%d\n&quot;,count(hi,'z')); // 0
+        printf(&quot;%d\n&quot;,count(hi,'L')); // 0
+    }
+</code></pre>">    #include &lt;stdio.h&gt;
+
+    int count(char *s, char c) {
+        int count = 0;
+        for (int i = 0; s[i] != '\0'; i++) {
+            if (s[i] == c) count++;
+        }
+        return count;
+    }
+
+    //// you can also rewrite the for loop with pointers
+    // for (char *p = sl *p != '\0'; p++) {
+    //     if (*p == c) count++;
+    // }
+
+    void main() {
+        char *hi = "Hello world!";
+        printf("%d\n",count(hi,'l')); // 3
+        printf("%d\n",count(hi,'z')); // 0
+        printf("%d\n",count(hi,'L')); // 0
+    }
+</code></pre><h3 id="string.h"><a name="string.h" href="#string.h"></a>string.h</h3><p><code>&lt;string.h&gt;</code> is a helpful C library that implements some basic string manipulation and utility functions.</p><p>Here is a list of some helpful functions from the library:</p><ul>
+<li><strong><code>size_t strlen(const char *s);</code></strong><ul>
+<li>returns the string length of <code>s</code> in an unsigned long</li><li>does not include <code>'\0'</code></li><li><code>const</code> means that <code>strlen</code> should only read the string, not mutate it.</li></ul>
+</li><li><strong><code>char *strcopy(char *s0, const char *s1);</code></strong><ul>
+<li>copies string <code>s1</code> into <code>s0</code></li><li>returns <code>s0</code></li><li><code>s0</code> must have enough room to store the contents of <code>s1</code><ul>
+<li><code>strcopy</code> does <strong>NOT</strong> check that there is enough room</li><li>if there is not enough room, strcopy will just overwrite any bits that follow after s0</li></ul>
+</li></ul>
+</li><li><strong><code>char *strcat(char *s0, const char *s1);</code></strong><ul>
+<li>concatenates <code>s1</code> to <code>s0</code>(adds <code>s1</code> to the end of <code>s0</code>);</li><li>returns <code>s0</code></li><li>Again, it doesn not check there is enough room, like <code>strcopy</code></li><li>Why does it return a pointer? Because one could “chain” multiple <code>strcat</code>s to concat multiple strings together in a one line expression</li></ul>
+</li><li><strong><code>int strcmp(const char *s0, const char *s1);</code></strong><ul>
+<li>computes strings “lexicographically,” i.e: comparing ASCII values</li><li>returns:<ul>
+<li><code>&lt; 0</code> if <code>s0 &lt; s1</code></li><li><code>==0</code> if <code>s0 == s1</code></li><li><code>&gt; 0</code> if <code>s0 &gt; s1</code></li></ul>
+</li><li>Example:<ul>
+<li><code>printf("%d\n", strcmp("abc","abC"));</code> returns <code>0 + 0 + (99-67) = 32</code></li></ul>
+</li></ul>
+</li></ul><p>Let’s write a new version of <code>strcat</code> that dynamically allocates enough memory to hold the contents of <code>s0</code> and <code>s1</code></p><h4 id="*concat.c*"><a name="*concat.c*" href="#*concat.c*"></a><em>concat.c</em></h4><pre><code data-origin="<pre><code>    #include &amp;lt;stdlib.h&amp;gt;
+    #include &amp;lt;string.h&amp;gt;
+
+    char *concat(const char *s0, const char *s1) {
+        char *s = (char*)malloc((strlen(s0) + strlen(s1)) + 1);
+        // fine since sizeof(char) is just 1
+        // extra 1 is there for the `\0`
+        strcpy(s,s0);
+        strcat(s,s1);
+        return s;
+    }
+
+    void main() {
+        char *hi = concat(&quot;hello&quot;, &quot;world&quot;);
+        printf(&quot;%s\n&quot;, hi);
+
+        free(hi);
+    }
+</code></pre>">    #include &lt;stdlib.h&gt;
+    #include &lt;string.h&gt;
+
+    char *concat(const char *s0, const char *s1) {
+        char *s = (char*)malloc((strlen(s0) + strlen(s1)) + 1);
+        // fine since sizeof(char) is just 1
+        // extra 1 is there for the `\0`
+        strcpy(s,s0);
+        strcat(s,s1);
+        return s;
+    }
+
+    void main() {
+        char *hi = concat("hello", "world");
+        printf("%s\n", hi);
+
+        free(hi);
+    }
+</code></pre><p>Now, for something completely different:</p><h3 id="switch-statements"><a name="switch-statements" href="#switch-statements"></a>Switch Statements</h3><p>Switch statements are an alternative to if statements.<br>They are not as versitile, but they may improve code readability</p><p>Switch statements are comprised of a few base parts:</p><pre><code data-origin="<pre><code>    switch (expression) {  // evaluate expression
+        case expr1:        //   if expression has a value expr1...
+            statements...  //     do statements...
+            break;         //     end switch
+        case expr2:        //   if expression has a value expr2...
+            statements...  //     do statements...
+                           //     (no break, therefore fall through to next case)
+        default:           //   if none of the above
+            statements...  //     do statements...
+    }
+</code></pre>">    switch (expression) {  // evaluate expression
+        case expr1:        //   if expression has a value expr1...
+            statements...  //     do statements...
+            break;         //     end switch
+        case expr2:        //   if expression has a value expr2...
+            statements...  //     do statements...
+                           //     (no break, therefore fall through to next case)
+        default:           //   if none of the above
+            statements...  //     do statements...
+    }
+</code></pre><p>For example, we could write a program that prints out a standing based on a letter grade:</p><pre><code data-origin="<pre><code>    void standing(char grade) {
+        switch (grade){
+            case 'A': printf(&quot;EXCEL\n&quot;); break;
+            case 'B': printf(&quot;GOOD \n&quot;); break;
+            case 'C': printf(&quot;SAT  \n&quot;); break;
+            case 'D': printf(&quot;POOR \n&quot;); break;
+            case 'E': printf(&quot;FAIL \n&quot;); break;
+            default : printf(&quot;INVALID\n&quot;);
+        }
+    }
+</code></pre>">    void standing(char grade) {
+        switch (grade){
+            case 'A': printf("EXCEL\n"); break;
+            case 'B': printf("GOOD \n"); break;
+            case 'C': printf("SAT  \n"); break;
+            case 'D': printf("POOR \n"); break;
+            case 'E': printf("FAIL \n"); break;
+            default : printf("INVALID\n");
+        }
+    }
+</code></pre><h2 id="lecture-22"><a name="lecture-22" href="#lecture-22"></a>Lecture 22</h2>
 
 <footer style="position:fixed; font-size:.8em; text-align:right; bottom:0px; margin-left:-25px; height:20px; width:100%;">generated by <a href="http://pad.haroopress.com" target="_blank">haroopad</a></footer>
 </body>

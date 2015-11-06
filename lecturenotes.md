@@ -1889,3 +1889,146 @@ Well, let's look at an example:
 This little function returns a pointer to an array filled with a range of numbers [0,n]
 
 ## Lecture 21
+Nov 6th
+
+### Dynamic Storage Continued
+Let's actually call `numbers()` from a main:
+```
+	void main () {
+    	int *q = numbers(100);
+        printf("%d\n", q[50]); // Outputs 51
+        free(q);
+    }
+```
+
+### Strings
+How does C handle strings?
+Well, simply put, a string in C is just an **array of `char`s** that is **terminated by a null character ('\0')**.
+
+We can define strings in a few ways:
+1) `char s[] = "hello";`
+2) `char s[] = {'h','e','l','l','o','\0'};`
+3) `char *s = "hello";`
+
+Each of these is equally valid (although 2 is usually not used).
+
+### String manipulations in C
+Unlike high level languages, C has pretty bad built in string manipulation.
+And by bad, I mean it doesn't have any.
+If you want to modify a string in some way, you have to manually write a function that will do an operation you like (or use a library like `<string.h>`).
+
+As an example, let's write a function that counts how many times a given character `c` occurs in a string `s`
+
+#### *c_count.c*
+````
+	#include <stdio.h>
+
+    int count(char *s, char c) {
+    	int count = 0;
+        for (int i = 0; s[i] != '\0'; i++) {
+        	if (s[i] == c) count++;
+        }
+        return count;
+    }
+
+    //// you can also rewrite the for loop with pointers
+    // for (char *p = sl *p != '\0'; p++) {
+    //     if (*p == c) count++;
+    // }
+
+    void main() {
+    	char *hi = "Hello world!";
+        printf("%d\n",count(hi,'l')); // 3
+        printf("%d\n",count(hi,'z')); // 0
+        printf("%d\n",count(hi,'L')); // 0
+    }
+````
+
+### string.h
+`<string.h>` is a helpful C library that implements some basic string manipulation and utility functions.
+
+Here is a list of some helpful functions from the library:
+* **`size_t strlen(const char *s);`**
+	* returns the string length of `s` in an unsigned long
+	* does not include `'\0'`
+	* `const` means that `strlen` should only read the string, not mutate it.
+* **`char *strcopy(char *s0, const char *s1);`**
+	* copies string `s1` into `s0`
+	* returns `s0`
+	* `s0` must have enough room to store the contents of `s1`
+		* `strcopy` does **NOT** check that there is enough room
+		* if there is not enough room, strcopy will just overwrite any bits that follow after s0
+* **`char *strcat(char *s0, const char *s1);`**
+	* concatenates `s1` to `s0`(adds `s1` to the end of `s0`);
+	* returns `s0`
+	* Again, it doesn not check there is enough room, like `strcopy`
+	* Why does it return a pointer? Because one could "chain" multiple `strcat`s to concat multiple strings together in a one line expression
+* **`int strcmp(const char *s0, const char *s1);`**
+	* computes strings "lexicographically," i.e: comparing ASCII values
+	* returns:
+		* `< 0` if `s0 < s1`
+		* `==0` if `s0 == s1`
+		* `> 0` if `s0 > s1`
+    * Example:
+    	* `printf("%d\n", strcmp("abc","abC"));` returns `0 + 0 + (99-67) = 32`
+
+Let's write a new version of `strcat` that dynamically allocates enough memory to hold the contents of `s0` and `s1`
+
+#### *concat.c*
+```
+	#include <stdlib.h>
+    #include <string.h>
+
+	char *concat(const char *s0, const char *s1) {
+    	char *s = (char*)malloc((strlen(s0) + strlen(s1)) + 1);
+        // fine since sizeof(char) is just 1
+        // extra 1 is there for the `\0`
+    	strcpy(s,s0);
+        strcat(s,s1);
+        return s;
+    }
+
+    void main() {
+    	char *hi = concat("hello", "world");
+        printf("%s\n", hi);
+
+        free(hi);
+    }
+```
+
+Now, for something completely different:
+
+### Switch Statements
+Switch statements are an alternative to if statements.
+They are not as versitile, but they may improve code readability
+
+Switch statements are comprised of a few base parts:
+```
+	switch (expression) {  // evaluate expression
+    	case expr1:        //   if expression has a value expr1...
+        	statements...  //     do statements...
+            break;         //     end switch
+        case expr2:        //   if expression has a value expr2...
+        	statements...  //     do statements...
+                           //     (no break, therefore fall through to next case)
+        default:           //   if none of the above
+        	statements...  //     do statements...
+	}
+
+```
+
+For example, we could write a program that prints out a standing based on a letter grade:
+```
+	void standing(char grade) {
+    	switch (grade){
+        	case 'A': printf("EXCEL\n"); break;
+            case 'B': printf("GOOD \n"); break;
+            case 'C': printf("SAT  \n"); break;
+            case 'D': printf("POOR \n"); break;
+            case 'E': printf("FAIL \n"); break;
+            default : printf("INVALID\n");
+        }
+    }
+```
+
+## Lecture 22
