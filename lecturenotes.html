@@ -2246,7 +2246,7 @@ x = 338, y = 130 \\
             case 'B': printf(&quot;GOOD \n&quot;); break;
             case 'C': printf(&quot;SAT  \n&quot;); break;
             case 'D': printf(&quot;POOR \n&quot;); break;
-            case 'E': printf(&quot;FAIL \n&quot;); break;
+            case 'F': printf(&quot;FAIL \n&quot;); break;
             default : printf(&quot;INVALID\n&quot;);
         }
     }
@@ -2256,11 +2256,121 @@ x = 338, y = 130 \\
             case 'B': printf("GOOD \n"); break;
             case 'C': printf("SAT  \n"); break;
             case 'D': printf("POOR \n"); break;
-            case 'E': printf("FAIL \n"); break;
+            case 'F': printf("FAIL \n"); break;
             default : printf("INVALID\n");
         }
     }
-</code></pre><h2 id="lecture-22"><a name="lecture-22" href="#lecture-22"></a>Lecture 22</h2>
+</code></pre><h2 id="lecture-22"><a name="lecture-22" href="#lecture-22"></a>Lecture 22</h2><p>Nov 9th</p><h3 id="switch-statements-cont."><a name="switch-statements-cont." href="#switch-statements-cont."></a>Switch Statements cont.</h3><p>Not including a <code>break;</code> at the end of a case will result in a “fall through” to the next case.<br>As an example, we can write a function that takes a letter grade and prints “pass” or “fail”</p><pre><code data-origin="<pre><code>    void passFail(char grade) {
+        switch (grade) {
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D': printf(&quot;pass\n&quot;); break;
+            case 'F': printf(&quot;fail\n&quot;); break;
+            default: printf(&quot;invalid\n&quot;);
+        }
+    }
+</code></pre>">    void passFail(char grade) {
+        switch (grade) {
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D': printf("pass\n"); break;
+            case 'F': printf("fail\n"); break;
+            default: printf("invalid\n");
+        }
+    }
+</code></pre><h3 id="dynamic-storage"><a name="dynamic-storage" href="#dynamic-storage"></a>Dynamic Storage</h3><p>What important functions does <code>#include &lt;stdlib.h&gt;</code> give us access to?</p><ul>
+<li><strong><code>void *malloc(size_t size);</code></strong><ul>
+<li>Allocates <code>size</code> bytes of memory for use by the program</li></ul>
+</li><li><strong><code>void free(void *p)</code></strong><ul>
+<li>Frees up the memory previously allocated by the program</li></ul>
+</li><li><strong><code>void *realloc(void *p, size_t size)</code></strong><ul>
+<li>Given a pointer to a dynamically allocated memory block (i.e: one returned by <code>malloc</code> or <code>calloc</code>), <code>realloc</code> will either expand or shrink that block of memory to size <code>size</code></li><li>If there is not enough room to expand the memory block, <code>realloc</code> may allocate a new block of memory elsewhere in the memory, and copy over data from the original block</li><li>Returns pointer to new location of memory array (may or may not be equal to the given pointer, depends if ‘realloc’ allocated new memory and copied, or not)</li></ul>
+</li><li><strong><code>void *calloc(size_t nmemb, size_t size);</code></strong><ul>
+<li>Allocates space for an array of <code>nmemb</code> elements of <code>size</code> bytes each, and initialtes all members of the array to <code>0</code></li></ul>
+</li></ul><p><strong>Note:</strong> <code>malloc</code>, <code>calloc</code>, and <code>realloc</code> all return <code>0</code> if they cannot allocate enough memory requested, or <code>size == 0</code></p><p>We should check the return values of these functions to make sure they were successful by doing something like <code>assert(p);</code> when allocating to a pointer <code>p</code></p><h3 id="pointers-to-structs"><a name="pointers-to-structs" href="#pointers-to-structs"></a>Pointers to Structs</h3><p>What happens if we want to<code>malloc</code> a memory block to hold structs?<br>Well, it works fine, but there is a weird syntax…<br>Take the following example:</p><pre><code data-origin="<pre><code>    typedef struct {
+        int hour, min;
+    } tod;
+
+    tod *t = malloc(sizeof(tod));
+
+    // to reference the elements of the tod malloc'ed array,
+    // we either do:
+
+    (*t).hour = 18;
+
+    // but that's ugly, so the more common way is
+
+    t-&amp;gt;hour = 18;
+</code></pre>">    typedef struct {
+        int hour, min;
+    } tod;
+
+    tod *t = malloc(sizeof(tod));
+
+    // to reference the elements of the tod malloc'ed array,
+    // we either do:
+
+    (*t).hour = 18;
+
+    // but that's ugly, so the more common way is
+
+    t-&gt;hour = 18;
+</code></pre><h3 id="better-arrays"><a name="better-arrays" href="#better-arrays"></a>Better Arrays</h3><p>Wouldn’t it be great if C had a vector type that</p><ul>
+<li>grows automatically when adding new elements?</li><li>knows the ammount of elements it contains?</li><li>initializes it’s own elements to 0?</li></ul><p>Yeah it would! So let’s make one!</p><p>We can make a special struct that has 3 fields:<br>1) <code>a</code> - the array of vector elements<br>2) <code>length</code> - the number of vector elements in the array<br>3) <code>size</code> - The total number of elements that have been allocated in the array</p><p>First, let’s come up with an outline for what functions we want…</p><h4 id="*vectors.h*"><a name="*vectors.h*" href="#*vectors.h*"></a><em>vectors.h</em></h4><pre><code data-origin="<pre><code>    #ifndef VECTOR_H
+    #define VECTOR_H
+        type struct {
+            int *a;
+            int length, size;
+        } vector;
+
+        vector *vectorCreate();
+        vector *vectorDelete(vector *v);
+        void vectorSet(vecotr *v, int index, int value);
+        int vectorGet(vector *v, int index);
+        int vectorLength(vector *v);
+    #endif
+</code></pre>">    #ifndef VECTOR_H
+    #define VECTOR_H
+        type struct {
+            int *a;
+            int length, size;
+        } vector;
+
+        vector *vectorCreate();
+        vector *vectorDelete(vector *v);
+        void vectorSet(vecotr *v, int index, int value);
+        int vectorGet(vector *v, int index);
+        int vectorLength(vector *v);
+    #endif
+</code></pre><p>Alright! Now, what behavior do we expect from using these functions?</p><h4 id="*vector_test.c*"><a name="*vector_test.c*" href="#*vector_test.c*"></a><em>vector_test.c</em></h4><pre><code data-origin="<pre><code>    #ifndef VECTOR_H
+    #define VECTOR_H
+        typedef struct {
+            int *a;
+            int length, size;
+        } vector;
+
+        vector *vectorCreate();
+        vector *vectorDelete(vector *v);
+        void vectorSet(vector *v, int index, int value);
+        int vectorGet(vector *v, int index);
+        int vectorLength(vector *v);
+    #endif
+</code></pre>">    #ifndef VECTOR_H
+    #define VECTOR_H
+        typedef struct {
+            int *a;
+            int length, size;
+        } vector;
+
+        vector *vectorCreate();
+        vector *vectorDelete(vector *v);
+        void vectorSet(vector *v, int index, int value);
+        int vectorGet(vector *v, int index);
+        int vectorLength(vector *v);
+    #endif
+</code></pre><p>Now, let’s actually implement the functions!<br>JKLOLNO We ran out of time. TUNE IN NEXT LECTURE FOR MORE EXCITING C IMPLEMENTATIONS!</p><h2 id="lecture-23"><a name="lecture-23" href="#lecture-23"></a>Lecture 23</h2>
 
 <footer style="position:fixed; font-size:.8em; text-align:right; bottom:0px; margin-left:-25px; height:20px; width:100%;">generated by <a href="http://pad.haroopress.com" target="_blank">haroopad</a></footer>
 </body>

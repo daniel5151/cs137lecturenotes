@@ -2025,10 +2025,120 @@ For example, we could write a program that prints out a standing based on a lett
             case 'B': printf("GOOD \n"); break;
             case 'C': printf("SAT  \n"); break;
             case 'D': printf("POOR \n"); break;
-            case 'E': printf("FAIL \n"); break;
+            case 'F': printf("FAIL \n"); break;
             default : printf("INVALID\n");
         }
     }
 ```
 
 ## Lecture 22
+Nov 9th
+
+### Switch Statements cont.
+Not including a `break;` at the end of a case will result in a "fall through" to the next case.
+As an example, we can write a function that takes a letter grade and prints "pass" or "fail"
+```
+	void passFail(char grade) {
+    	switch (grade) {
+        	case 'A':
+            case 'B':
+            case 'C':
+            case 'D': printf("pass\n"); break;
+            case 'F': printf("fail\n"); break;
+            default: printf("invalid\n");
+        }
+    }
+```
+
+### Dynamic Storage
+What important functions does `#include <stdlib.h>` give us access to?
+* **`void *malloc(size_t size);`**
+	* Allocates `size` bytes of memory for use by the program
+* **`void free(void *p)`**
+	* Frees up the memory previously allocated by the program
+* **`void *realloc(void *p, size_t size)`**
+	* Given a pointer to a dynamically allocated memory block (i.e: one returned by `malloc` or `calloc`), `realloc` will either expand or shrink that block of memory to size `size`
+	* If there is not enough room to expand the memory block, `realloc` may allocate a new block of memory elsewhere in the memory, and copy over data from the original block
+	* Returns pointer to new location of memory array (may or may not be equal to the given pointer, depends if 'realloc' allocated new memory and copied, or not)
+* **`void *calloc(size_t nmemb, size_t size);`**
+	* Allocates space for an array of `nmemb` elements of `size` bytes each, and initialtes all members of the array to `0`
+
+**Note:** `malloc`, `calloc`, and `realloc` all return `0` if they cannot allocate enough memory requested, or `size == 0`
+
+We should check the return values of these functions to make sure they were successful by doing something like `assert(p);` when allocating to a pointer `p`
+
+### Pointers to Structs
+What happens if we want to`malloc` a memory block to hold structs?
+Well, it works fine, but there is a weird syntax...
+Take the following example:
+```
+    typedef struct {
+        int hour, min;
+    } tod;
+
+    tod *t = malloc(sizeof(tod));
+
+    // to reference the elements of the tod malloc'ed array,
+    // we either do:
+
+    (*t).hour = 18;
+
+    // but that's ugly, so the more common way is
+
+    t->hour = 18;
+```
+
+### Better Arrays
+Wouldn't it be great if C had a vector type that
+* grows automatically when adding new elements?
+* knows the ammount of elements it contains?
+* initializes it's own elements to 0?
+
+Yeah it would! So let's make one!
+
+We can make a special struct that has 3 fields:
+1) `a` - the array of vector elements
+2) `length` - the number of vector elements in the array
+3) `size` - The total number of elements that have been allocated in the array
+
+First, let's come up with an outline for what functions we want...
+#### *vectors.h*
+```
+	#ifndef VECTOR_H
+    #define VECTOR_H
+        type struct {
+            int *a;
+            int length, size;
+        } vector;
+
+        vector *vectorCreate();
+        vector *vectorDelete(vector *v);
+        void vectorSet(vecotr *v, int index, int value);
+        int vectorGet(vector *v, int index);
+        int vectorLength(vector *v);
+    #endif
+```
+
+Alright! Now, what behavior do we expect from using these functions?
+#### *vector_test.c*
+```
+    #ifndef VECTOR_H
+    #define VECTOR_H
+        typedef struct {
+            int *a;
+            int length, size;
+        } vector;
+
+        vector *vectorCreate();
+        vector *vectorDelete(vector *v);
+        void vectorSet(vector *v, int index, int value);
+        int vectorGet(vector *v, int index);
+        int vectorLength(vector *v);
+    #endif
+```
+
+Now, let's actually implement the functions!
+JKLOLNO We ran out of time. TUNE IN NEXT LECTURE FOR MORE EXCITING C IMPLEMENTATIONS!
+
+
+## Lecture 23
