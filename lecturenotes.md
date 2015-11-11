@@ -2104,30 +2104,10 @@ We can make a special struct that has 3 fields:
 First, let's come up with an outline for what functions we want...
 #### *vectors.h*
 ```
-	#ifndef VECTOR_H
-    #define VECTOR_H
-        type struct {
-            int *a;
-            int length, size;
-        } vector;
-
-        vector *vectorCreate();
-        vector *vectorDelete(vector *v);
-        void vectorSet(vecotr *v, int index, int value);
-        int vectorGet(vector *v, int index);
-        int vectorLength(vector *v);
-    #endif
-```
-
-Alright! Now, what behavior do we expect from using these functions?
-#### *vector_test.c*
-```
     #ifndef VECTOR_H
     #define VECTOR_H
-        typedef struct {
-            int *a;
-            int length, size;
-        } vector;
+        struct vector;
+        typedef struct vector vector;
 
         vector *vectorCreate();
         vector *vectorDelete(vector *v);
@@ -2137,8 +2117,140 @@ Alright! Now, what behavior do we expect from using these functions?
     #endif
 ```
 
+Small note: we do not explicitly state what `struct vector` stores here in the header, and we instead declare it's structure later on in our implementation file `vector.c`.
+This practice is called *opaque structs*, i.e: we make it so that the user doesn't see the details of your struct implementation in the header file.
+
+Alright! Now, what behavior do we expect from using these functions?
+#### *vector_test.c*
+```
+    #include <stdio.h>
+    #include "vector.h"
+
+    void main() {
+        vector *v = vectorCreate();
+
+        vectorSet(v, 10, 2);
+        printf("%d\n", vectorLength(v));    // 11
+        printf("%d\n", vectorGet(v, 10));   // 2
+        v = vectorDelete(v);
+    }
+```
+
 Now, let's actually implement the functions!
 JKLOLNO We ran out of time. TUNE IN NEXT LECTURE FOR MORE EXCITING C IMPLEMENTATIONS!
 
 
 ## Lecture 23
+Nov 11
+
+Okay, here is the actual implementation:
+#### *vectors.c*
+```
+    #include <assert.h>
+    #include <stdlib.h>
+    #include "vector.h"
+
+    struct vector{
+        int *a;
+        int length, size;
+    };
+
+    vector *vectorCreate() {
+        vector *v = malloc(sizeof(vector));
+            assert(v);
+        v->size = 1;
+        v->a = malloc(1*sizeof(int));
+            assert(v->a);
+        v->length = 0;
+        return v;
+    }
+
+    vector *vectorDelete(vector *v) {
+        if (v) {
+            free(v->a);   // Free array in v
+            free(v);      // Free the struct v
+        }
+        return 0;         // sets pointer to 0
+    }
+
+    void vectorSet(vector *v, int index, int value) {
+        assert(v && index >= 0);
+        // grow storaeg if necessary
+        if (index >= v->size) {
+            do {
+                v->size *= 2;
+            } while (index >= v->size);
+            v->a = realloc(v->a, v->size * sizeof(int));
+        }
+        // another way to do this is to increase
+        // the size of the array using
+        //     v->size = 1<<ceil(log(index)/log(2));
+        // but just because you can, doesn't mean you should
+
+        // now, fill new elements with 0s
+        while (index >= v->length) {
+            v->a[v->length] = 0;
+            v->length++;
+        }
+        v -> a[index] = value;
+    }
+
+    int vectorGet(vector *v, int index) {
+        assert(v && index >= 0 && index < v->length);
+        return v->a[index];
+    }
+
+    int vectorLength(vector *v) {
+        assert(v);
+        return v->length;
+    }
+```
+
+### Information Hiding
+Remember how we made it so that `vector`'s srtucture was not declared in the header?
+This design principle is called **information hiding**
+
+Why do we practice this notion of information hiding?
+- If we hide the details of implementation from the user, yet keep the "interface" the same, we can change our implememntation without braking other people's reliant code
+- If they can see your struct, they may directly reference it, and then when you change it's implementaion, their code will break.
+
+### Big O Notation
+Get ready for some Math!
+
+Let $$$ f(x) $$$ be a function over the real numbers.
+$$$ O(f(x)) $$$ is a set of functions such that:
+$$$ g(x) \in O(f(x)) $$$ if and only if there exists an $$$ M>0 $$$ and $$$ x_0 $$$ such that $$$ |g(x)| \leq M|f(x)| $$$ for all $$$ x > x_0 $$$
+
+In pure math:
+$$$
+	g(x) \in O(f(x)) \Longleftrightarrow \exists\ M>0, x_0 |\ |g(x)|\leq M|f(x)| \ \forall\ x > x_0
+$$$
+
+For example:
+$$$ 3x^2 + 2 \in O(x^2) $$$
+Proof:
+if $$$ x>1 $$$, then if $$$ M = 5 $$$
+$$$
+	|3x^2 +2 | = 3x^2 + 1 \leq 5x^2 = 5|x^2|\\
+    x_0 = 1
+$$$
+Therefore, if $$$ x_0 = 1, M = 5 $$$
+$$$ |3x^2 +2 | = M|x^2| $$$ for all $$$ x > x_0 $$$
+
+Another example of a **Constant** function
+$$$ 6sin(x) \in O(1) $$$
+Proof:
+if $$$ x>0, M=6 $$$, then $$$ |6sin(x)| \leq 6$$$
+
+**Polynomials** of degree $$$ n $$$ belong to $$$ O(x^n) $$$.
+Proof:
+if $$$ x > 1 $$$,
+$$$
+	|a_nx^n+a_{n-1}x^{n-1}+...+a_0 \\
+    \leq |a_n|x^n + |a_{n-1}|x^{n-1}+...+|a_0| \\
+    \leq (|a_n| + |a_{n-1}|+...+|a_0|)x^n
+$$$
+This holds if $$$ x_0 = 1, M = \sum\limits_{i=1}^n|a_n| $$$
+As a result, if $$$ n \leq m $$$ then $$$ x^n \in O(x^m) $$$
+
+## Lecture 24
