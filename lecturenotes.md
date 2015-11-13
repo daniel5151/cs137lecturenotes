@@ -2175,7 +2175,7 @@ Okay, here is the actual implementation:
 
     void vectorSet(vector *v, int index, int value) {
         assert(v && index >= 0);
-        // grow storaeg if necessary
+        // grow storage if necessary
         if (index >= v->size) {
             do {
                 v->size *= 2;
@@ -2223,7 +2223,7 @@ $$$ g(x) \in O(f(x)) $$$ if and only if there exists an $$$ M>0 $$$ and $$$ x_0 
 
 In pure math:
 $$$
-	g(x) \in O(f(x)) \Longleftrightarrow \exists\ M>0, x_0 |\ |g(x)|\leq M|f(x)| \ \forall\ x > x_0
+	g(x) \in O(f(x)) \Longleftrightarrow \exists\ M>0, x_0\ s.t\ |g(x)|\leq M|f(x)| \ \forall\ x > x_0
 $$$
 
 For example:
@@ -2254,3 +2254,101 @@ This holds if $$$ x_0 = 1, M = \sum\limits_{i=1}^n|a_n| $$$
 As a result, if $$$ n \leq m $$$ then $$$ x^n \in O(x^m) $$$
 
 ## Lecture 24
+Nov. 13
+
+### Big O Notation Continued
+More examples! Here is a **Logarithmic** function:
+$$$ log_a(x) \in O(log_b(x)) $$$
+Proof:
+if $$$ x > 1 $$$,
+$$$
+	|log_a(x)| = |log_b(x)|\\
+    = \frac{log_b(x)}{log_b(a)}\\
+    = \frac{1}{log_b(a)}|log_b(x)|\\
+$$$
+Therefore, if $$$ x_0 = 1, M = \frac{1}{log_b(a)} $$$
+
+i.e: we can ignore the base of a logarithm
+- We rarely write the bse of the logarithm in Big O Notation
+
+One last example: ** Exponential ** functions:
+$$$ x^n \in O(c^x) $$$ if  $$$ n $$$ is an int, and $$$ c > 1 $$$
+
+### Combinations of Big O's
+if $$$ g_0(x) \in O(f_0(x)) $$$ and $$$ g_1(x) \in O(f_1(x)) $$$, then
+i) $$$ g_0(x) + g_1(x) \in O(f_0(x)+f_1(x)) $$$
+ii) $$$ g_0(x)g_1(x) \in O(f_0(x)f_1(x)) $$$
+
+### Transitivity of Big O's
+if $$$ h(x) \in O(g(x)) $$$ and $$$ g(x) \in O(f(x)) $$$, then
+$$$ h(x) \in O(f(x)) $$$
+
+### A note on convention:
+$$$ g(x) \in O(f(x)) $$$
+can also be written as:
+$$$ g(x) $$$ is $$$ O(f(x)) $$$
+$$$ g(x) = O(f(x)) $$$
+
+### Big O Notation in CS
+How is Big O Notation relevant in CS?
+Well, we can use it to analyze the **efficiency of algorithms!**
+
+Take the following Linear Search Algorithm:
+It returns the index of the first occurance of a value in an array.
+```
+	int search(int a[], int n, int value) {
+    	for (int i = 0; i < n; i++) {
+        	if (a[i] == value) return i;
+        }
+        return -1; // value not found
+    }
+```
+
+What operations does this function perform?
+ Order | Operation               | Time to Perform
+ ----- | ----------------------- | -------------------
+ 1     | enter the function      | up to A
+       | start the loop          |
+ 2     | test the loop condition | up to B **n times**
+       | evaluate if expression  |
+       | increment loop counter  |
+ 3     | return answer           | up to C
+
+Assuming n > 0:
+
+The **best case scenario** is that the value is *found in a[0].*
+Time $$$ = A + B + C = O(1) $$$, or **constant time**.
+
+The **worst case scenario** is that the value is *not found.*
+Time $$$ = A + Bn + C = O(n) $$$, or **linear time**.
+
+The **average case** is that the value is *located somewhere between a[0]...a[n-1]*
+Time $$$ = \frac{1}{n} \sum\limits_{i=1}^n(a+Bi+C)\\ = A + B + \frac{B}{n} \sum\limits_{i=1}^n(i)\\ = A + C + \frac{B}{n}\frac{n(n+1)}{2} \\= A + C + \frac{B}{2} + \frac{B}{2}n\\ = O(n)$$$
+or **linear time**.
+
+Usually, we are only interested in the **worst case scenario**.
+
+### Jargon!
+Sorted from leat to most complex:
+ Big O    | Name
+ -------- | ----
+ O(1)     | constant time
+ O(log n) | logarithmic
+ O(n)     | linear
+ O(n^2^)  | quadratic
+ O(n^3^)  | cubic
+ O(n^m^)  | polynomial
+ O(c^n^)  | exponential
+ O(n!)    | factorial
+ O(n^n^)  | *write a new algorithm*
+
+### Sorting
+Given an array of integers, how can we sort the array in ascending order (non-descending order)?
+
+### Sorting - Selection Sort
+- Find the smallest element
+- Swap with first element
+- Repeat above with the rest of the array, finding next smallest number, and swapping with next element
+<img src="http://www.programiz.com/sites/tutorial2program/files/Selection-sort-algorithm.jpg">
+
+## Lecture 25
