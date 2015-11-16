@@ -2342,8 +2342,14 @@ Sorted from leat to most complex:
  O(n!)    | factorial
  O(n^n^)  | *write a new algorithm*
 
+## Lecture 25
+Nov 16th
+
 ### Sorting
 Given an array of integers, how can we sort the array in ascending order (non-descending order)?
+
+Relevant Interesting Video:
+https://www.youtube.com/watch?v=kPRA0W1kECg
 
 ### Sorting - Selection Sort
 - Find the smallest element
@@ -2351,4 +2357,99 @@ Given an array of integers, how can we sort the array in ascending order (non-de
 - Repeat above with the rest of the array, finding next smallest number, and swapping with next element
 <img src="http://www.programiz.com/sites/tutorial2program/files/Selection-sort-algorithm.jpg">
 
-## Lecture 25
+#### *selection.c*
+```
+	#include <stdio.h>
+
+    void selection_sort (int a[], int n) {
+        for (int i = 0; i < n-1; i++) {
+            int min = i;
+            for (int j = i+1; j<n; j++)
+                if (a[j] < a[min]) min = j;
+
+            int temp = a[min];
+            a[min] = a[i];
+            a[i] = temp;
+        }
+    }
+
+    void main (){
+        int a[] = {-10,-7,2,14,11,38};
+        int n = sizeof(a)/sizeof(a[0]);
+
+        selection_sort(a,n);
+
+        for (int i = 0; i < n; i++) {
+            printf("%d, ", a[i]);
+        }
+        printf("\n");
+    }
+```
+
+This is a **O(n^2^)** algorithm. Why? Well, let's analyze it...
+
+- Entering the function, and initializing the outer loop will take **A** Time.
+- In the outer loop: 
+	- Setting up the inner loop, swapping the variables, and running the inner loop takes **B * (n - 1)** Time.
+	- In the inner loop:
+		- finding the smallest number will take **C * (n - (i + 1))**
+
+Thus, the total execution time will be:
+$$$
+	A + B(n-1) + C( (n-1)+(n-2)+(n-3)+...+1 ) \\
+    = A + B(n-1) + C \sum\limits_{i=1}^n(i) \\
+    = A + B(n-1) + C\frac{n(n-1)}{2}\\
+    = O(n^2)
+$$$
+
+### Sorting - Insertion Sort
+- seperate the array into a **sorted part** and an **unsorted part**.
+- For every **x** in the unsorted part, find where x should go in the sorted part.
+	- shift up elements that are > x in the sorted part
+	- insert x
+- repeat n-1 times
+
+<img src="http://interactivepython.org/runestone/static/pythonds/_images/insertionsort.png">
+
+#### *insertion.c*
+```
+	#include <stdio.h>
+
+    void insertion_sort (int *a, int n) {
+        int i, j, x;
+        for (i = 1; i < n; i++) {
+            x = a[i];
+            for (j = i; j > 0 && x < a[j - 1]; j--) {
+                a[j] = a[j - 1];
+            }
+            a[j] = x;
+        }
+    }
+
+    void main (){
+        int a[] = {-10,2,14,-7,11,38};
+        int n = sizeof(a)/sizeof(a[0]);
+
+        insertion_sort(a,n);
+
+        for (int i = 0; i < n; i++) {
+            printf("%d, ", a[i]);
+        }
+        printf("\n");
+    }
+```
+
+This is also a **O(n^2^)** algorithm, but it *can* be **O(n)** sometimes!
+
+- Outer loop has n-1 interations
+- Inner loop has 0 -> i iterations
+- In the **worst** case:
+	- time $$$ = 1 + 2 + 3 + ... + (n-1) = O(n^2) $$$
+- In the **best** case though:
+	- time $$$ = (n-1)*C = O(n) $$$
+
+### Sorting - Merge Sort
+FIND OUT NEXT TIME ON CS-137
+DOO DOO DOO DOO DOOO DOO DOOOOOOOO
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Merge_sort_algorithm_diagram.svg/300px-Merge_sort_algorithm_diagram.svg.png">
