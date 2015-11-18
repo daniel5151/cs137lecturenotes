@@ -2404,7 +2404,7 @@ $$$
 
 ### Sorting - Insertion Sort
 - seperate the array into a **sorted part** and an **unsorted part**.
-- For every **x** in the unsorted part, find where x should go in the sorted part.
+- for every **x** in the unsorted part, find where x should go in the sorted part.
 	- shift up elements that are > x in the sorted part
 	- insert x
 - repeat n-1 times
@@ -2446,10 +2446,123 @@ This is also a **O(n^2^)** algorithm, but it *can* be **O(n)** sometimes!
 - In the **worst** case:
 	- time $$$ = 1 + 2 + 3 + ... + (n-1) = O(n^2) $$$
 - In the **best** case though:
-	- time $$$ = (n-1)*C = O(n) $$$
+	- time $$$ = (n-1)C = O(n) $$$
+
+## Lecture 26
+Nov 18
 
 ### Sorting - Merge Sort
-FIND OUT NEXT TIME ON CS-137
-DOO DOO DOO DOO DOOO DOO DOOOOOOOO
+Unlike the above algorithms, merge sort is a **divide and conquer** algorithm.
+It is also a *recursive* algorithm
+
+- Divide the array in half
+- Sort each half (recursively)
+- Merge the results
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Merge_sort_algorithm_diagram.svg/300px-Merge_sort_algorithm_diagram.svg.png">
+
+#### *merge.c*
+```
+	#include <stdio.h>
+    #include <stdlib.h>
+    #include <assert.h>
+
+    // a is array to be sorted
+    // t is temp array
+    // n is size
+    void merge_sort (int a[], int t[], int n) {
+        if (n <= 1) return;
+
+        // divide and sort both halves
+        int middle = n / 2;
+        int *lower = a;
+        int *upper = a + middle;
+
+        merge_sort(lower, t,     middle);
+        merge_sort(upper, t, n - middle);
+
+        // merge the halves:
+        int i = 0;      // lower index
+        int j = middle; // upper index
+        int k = 0;      // temp  index
+
+        // One half...
+        while (i < middle && j < n) {
+            // lower < upper
+            if (a[i] <= a[j]) t[k++] = a[i++];
+            // lower > upper
+            else              t[k++] = a[j++];
+        }
+
+        // Other half...
+        // Only one of the two loops below will
+        // actually execute
+        while (i < middle) t[k++] = a[i++];
+        while (j < n)      t[k++] = a[j++];
+
+        // copy from temp to a
+        for (i = 0; i < n; i++) a[i] = t[i];
+
+    }
+
+    void sort(int a[], int n) {
+        int *t = malloc(n*sizeof(int));
+            assert(t);
+        merge_sort(a, t, n);
+        free(t);
+    }
+
+    void main (){
+        int a[] = {-10,2,14,-7,11,38};
+        int n = sizeof(a)/sizeof(a[0]);
+
+        sort(a,n);
+
+        for (int i = 0; i < n; i++) {
+            printf("%d, ", a[i]);
+        }
+        printf("\n");
+    }
+```
+What is the time complexity of this algorithm?
+Well, it's actually **O(n log(n))**!
+Why?
+
+Suppose $$$ n = 2^k $$$
+So, $$$ n = \{2,3,8,16...\}\ k = \{1,2,3,4...\} $$$
+The size of the array is divided in half $$$ k = \log_2(n) $$$ times, and ech time it is split, $$$ n $$$ operations are done on that level.
+
+So: $$$ O(nk) = O(n\log_2(n)) = O(n\log(n)) $$$
+
+This is best, worst, and average all at once.
+
+## Lecture 27
+Nov 18
+
+### Sorting - Quicksort
+Tony Hoare invented this alogrithm in 1959, when he was only ~26 years old!
+
+*"If you haven't done anything worthwhile in CS before you turn 30, you probably never will"*
+\- **Prof. Andrew Morton**
+
+This is a good algorithm because you *don't have to use a temporary array!*
+
+How does quicksort work?
+- Pick an element of the array at random. We call this element **P**, the **pivot** element
+- We then partition the array into 3 sections, one of all element before P, P itself, and every element after P.
+- We then recursively sort each section other than P itself.
+
+How do we actually partition? That's the critical question...
+
+**One that these notes cannot adequately answer!**
+Sorry about that.
+You really need diagrams for this one...
+On the bring side, Wikipedia.org exists. And Google too!
+
+While I can't expain the algorthm, I can at least give you an implementation:
+#### *quick.c*
+```
+
+```
+
+## Lecture 28
