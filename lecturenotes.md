@@ -2539,7 +2539,7 @@ This is best, worst, and average all at once.
 ## Lecture 27
 Nov 18
 
-### Sorting - Quicksort
+### Sorting - Quicksort - WARNING, BAD NOTES
 Tony Hoare invented this alogrithm in 1959, when he was only ~26 years old!
 
 *"If you haven't done anything worthwhile in CS before you turn 30, you probably never will"*
@@ -2562,7 +2562,59 @@ On the bring side, Wikipedia.org exists. And Google too!
 While I can't expain the algorthm, I can at least give you an implementation:
 #### *quick.c*
 ```
+	#include <stdio.h>
+    #include <stdlib.h>
+    #include <assert.h>
 
+    // swap helper
+    void swap(int *a, int *b) {
+        int t = *a;
+        *a = *b;
+        *b = t;
+    }
+
+    void quick_sort(int a[], int n) {
+        if (n <= 1) return;
+
+        // sweep
+        int m = 0;
+        for (int i = 1; i < n; i++) {
+            if (a[i] < a[0]) {
+                m++;
+                swap(&a[m],&a[i]);
+            }
+        }
+
+        // put pivot between partitions
+        // i.e, swap a[0] and a[m]
+        swap(&a[0],&a[m]);
+
+        // quicksort each partition
+        quick_sort(a, m);
+        quick_sort(a + m + 1, n - m - 1);
+    }
+
+    void main (){
+        int a[] = {-10,2,14,-7,11,38};
+        int n = sizeof(a)/sizeof(a[0]);
+
+        quick_sort(a,n);
+
+        for (int i = 0; i < n; i++) {
+            printf("%d, ", a[i]);
+        }
+        printf("\n");
+    }
 ```
 
+Again, I'm not very good at explaining this one, so here is the takeaway:
+This algorithm's time efficiency is:
+- Best case $$$ O(n\log(n)) $$$
+- On average $$$ O(n\log(n)) $$$
+- Worst case (the array is already sorted) $$$ O(n^2) $$$
+
+Despite quicksort's pretty bad worst case compared to other algorithms, in most cases, quicksort is still faster.
+
 ## Lecture 28
+Nov 20th
+
