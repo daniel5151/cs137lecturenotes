@@ -2536,7 +2536,7 @@ So: $$$ O(nk) = O(n\log_2(n)) = O(n\log(n)) $$$
 
 This is best, worst, and average all at once.
 
-## Lecture 27
+## Lecture 27+28
 Nov 18
 
 ### Sorting - Quicksort - WARNING, BAD NOTES
@@ -2615,6 +2615,96 @@ This algorithm's time efficiency is:
 
 Despite quicksort's pretty bad worst case compared to other algorithms, in most cases, quicksort is still faster.
 
-## Lecture 28
-Nov 20th
+Also, I missed space complexity, sorry.
 
+## Lecture 29
+Nov 23th
+
+### Quicksort Improvements
+The Hoare partitioner is one way to make quicksort more efficient.
+It's uglier code, but it has better preformance.
+
+- Pick a Pivot
+- Sweep from left *AND* right
+    - using i and j to index left and right respectively
+- swap when a[i] > P && a[j] < P
+- stop when i > j
+
+Here is the code Morton wrote on the board. IT doesn't compile for me, but this is letter for letter what was put up:
+
+#### *quicksort_hoare.c*
+```
+	#include <stdio.h>
+
+    // swap helper
+    void swap(int *a, int *b) {
+        int t = *a;
+        *a = *b;
+        *b = t;
+    }
+
+    void quick_sort(int a[], int left, int right) {
+        int p = a[left];
+        int i = left, j = right;
+
+        while (i <= j) {
+            while (a[i] <= p) i++;
+            while (a[j] >= p) j--;
+
+            if (i <= j) swap(&a[i], &a[j]);
+        }
+
+        swap(&a[left], &a[j]);
+
+        if (left < j) quick_sort(a,left,j);
+        if (right > i) quick_sort(a,i,right);
+    }
+
+    int main (){
+        int a[] = {-10,2,14,-7,11,38};
+        int n = sizeof(a)/sizeof(a[0]);
+
+        quick_sort(a,0,n);
+
+        for (int i = 0; i < n; i++) {
+            printf("%d, ", a[i]);
+        }
+        printf("\n");
+        return 0;
+    }
+```
+
+### The qsort Function
+In `stdlib.h` there is a function called `qsort` that is defined as follows:
+
+**`void qsort(void *base, size_t n, size_t, size, int (*compare)(const void *a, const void *b));`**
+
+- `*base` is a pointer to the first element in the array
+- `n` is the number of elements in the array
+- `size` is the size of each array element in bytes
+- `*compare` is a **function pointer** to some function that
+	- returns `< 0` if `*a < *b`
+	- returns `0` if `*a = *b`
+	- returns `> 0` if `*a > *b`
+
+Essentially, `qsort` is a heneralized sorter that can sort any structure you give if so long as you specify the type of structure you are passing it, and how to comapre structure elements.
+
+For example, you can tell `qsort` to sort integers by doing something like this:
+```
+	#include <stdlib.h>
+
+	int compare(const void *a, const void *b) {
+        int p = *(int *)a;
+        int q = *(int *)b;
+        if (p < q) return -1;
+        else if (p == q) return 0;
+        else return 1;
+    }
+
+    void sort(int a[], int n) {
+    	qsort(a,n,sizeof(int),compare);
+    }
+```
+And you can just call `sort()`
+
+## Lecture 30
