@@ -3025,7 +3025,102 @@ x = 338, y = 130 \\
     void sort(int a[], int n) {
         qsort(a,n,sizeof(int),compare);
     }
-</code></pre><p>And you can just call <code>sort()</code></p><h2 id="lecture-30"><a name="lecture-30" href="#lecture-30"></a>Lecture 30</h2>
+</code></pre><p>And you can just call <code>sort()</code></p><h2 id="lecture-30"><a name="lecture-30" href="#lecture-30"></a>Lecture 30</h2><p>Nov 27th</p><h3 id="fibonacci-numbers"><a name="fibonacci-numbers" href="#fibonacci-numbers"></a>Fibonacci Numbers</h3><p>Fibonacci numbers are defined as follows:</p><p><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-181-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-2951" style="width: 9.683em; display: inline-block;"><span style="display: inline-block; position: relative; width: 7.927em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(3.582em 1000em 7.329em -0.492em); top: -4.426em; left: 0em;"><span class="mrow" id="MathJax-Span-2952"><span style="display: inline-block; position: relative; width: 7.927em; height: 0px;"><span style="position: absolute; clip: rect(3.145em 1000em 4.319em -0.461em); top: -3.989em; left: 0em;"><span class="msubsup" id="MathJax-Span-2953"><span style="display: inline-block; position: relative; width: 1.117em; height: 0px;"><span style="position: absolute; clip: rect(1.67em 1000em 2.678em -0.461em); top: -2.514em; left: 0em;"><span class="mi" id="MathJax-Span-2954" style="font-family: MathJax_Math; font-style: italic;">F<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.106em;"></span></span><span style="display: inline-block; width: 0px; height: 2.514em;"></span></span><span style="position: absolute; top: -2.145em; left: 0.659em;"><span class="mn" id="MathJax-Span-2955" style="font-size: 70.7%; font-family: MathJax_Main;">0</span><span style="display: inline-block; width: 0px; height: 2.295em;"></span></span></span></span><span class="mo" id="MathJax-Span-2956" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mn" id="MathJax-Span-2957" style="font-family: MathJax_Main; padding-left: 0.278em;">0</span><span style="display: inline-block; width: 0px; height: 3.989em;"></span></span><span style="position: absolute; clip: rect(3.145em 1000em 4.347em -0.492em); top: -2.713em; left: 0em;"><span class="mspace" id="MathJax-Span-2958" style="height: 0em; vertical-align: 0em; width: 0em; display: inline-block; overflow: hidden;"></span><span class="msubsup" id="MathJax-Span-2959"><span style="display: inline-block; position: relative; width: 1.117em; height: 0px;"><span style="position: absolute; clip: rect(1.67em 1000em 2.678em -0.461em); top: -2.514em; left: 0em;"><span class="mi" id="MathJax-Span-2960" style="font-family: MathJax_Math; font-style: italic;">F<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.106em;"></span></span><span style="display: inline-block; width: 0px; height: 2.514em;"></span></span><span style="position: absolute; top: -2.145em; left: 0.659em;"><span class="mn" id="MathJax-Span-2961" style="font-size: 70.7%; font-family: MathJax_Main;">1</span><span style="display: inline-block; width: 0px; height: 2.295em;"></span></span></span></span><span class="mo" id="MathJax-Span-2962" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="mn" id="MathJax-Span-2963" style="font-family: MathJax_Main; padding-left: 0.278em;">1</span><span class="mo" id="MathJax-Span-2964" style="font-family: MathJax_Main;">,</span><span style="display: inline-block; width: 0px; height: 3.989em;"></span></span><span style="position: absolute; clip: rect(3.145em 1000em 4.311em -0.492em); top: -1.408em; left: 0em;"><span class="mspace" id="MathJax-Span-2965" style="height: 0em; vertical-align: 0em; width: 0em; display: inline-block; overflow: hidden;"></span><span class="msubsup" id="MathJax-Span-2966" style=""><span style="display: inline-block; position: relative; width: 1.171em; height: 0px;"><span style="position: absolute; clip: rect(1.67em 1000em 2.678em -0.461em); top: -2.514em; left: 0em;"><span class="mi" id="MathJax-Span-2967" style="font-family: MathJax_Math; font-style: italic;">F<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.106em;"></span></span><span style="display: inline-block; width: 0px; height: 2.514em;"></span></span><span style="position: absolute; top: -2.09em; left: 0.659em;"><span class="mi" id="MathJax-Span-2968" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">n</span><span style="display: inline-block; width: 0px; height: 2.24em;"></span></span></span></span><span class="mo" id="MathJax-Span-2969" style="font-family: MathJax_Main; padding-left: 0.278em;">=</span><span class="msubsup" id="MathJax-Span-2970" style="padding-left: 0.278em;"><span style="display: inline-block; position: relative; width: 2.1em; height: 0px;"><span style="position: absolute; clip: rect(1.67em 1000em 2.678em -0.461em); top: -2.514em; left: 0em;"><span class="mi" id="MathJax-Span-2971" style="font-family: MathJax_Math; font-style: italic;">F<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.106em;"></span></span><span style="display: inline-block; width: 0px; height: 2.514em;"></span></span><span style="position: absolute; top: -2.145em; left: 0.659em;"><span class="texatom" id="MathJax-Span-2972"><span class="mrow" id="MathJax-Span-2973"><span class="mi" id="MathJax-Span-2974" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">n</span><span class="mo" id="MathJax-Span-2975" style="font-size: 70.7%; font-family: MathJax_Main;">−</span><span class="mn" id="MathJax-Span-2976" style="font-size: 70.7%; font-family: MathJax_Main;">1</span></span></span><span style="display: inline-block; width: 0px; height: 2.295em;"></span></span></span></span><span class="mo" id="MathJax-Span-2977" style="font-family: MathJax_Main; padding-left: 0.222em;">+</span><span class="msubsup" id="MathJax-Span-2978" style="padding-left: 0.222em;"><span style="display: inline-block; position: relative; width: 2.1em; height: 0px;"><span style="position: absolute; clip: rect(1.67em 1000em 2.678em -0.461em); top: -2.514em; left: 0em;"><span class="mi" id="MathJax-Span-2979" style="font-family: MathJax_Math; font-style: italic;">F<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.106em;"></span></span><span style="display: inline-block; width: 0px; height: 2.514em;"></span></span><span style="position: absolute; top: -2.145em; left: 0.659em;"><span class="texatom" id="MathJax-Span-2980"><span class="mrow" id="MathJax-Span-2981"><span class="mi" id="MathJax-Span-2982" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">n</span><span class="mo" id="MathJax-Span-2983" style="font-size: 70.7%; font-family: MathJax_Main;">−</span><span class="mn" id="MathJax-Span-2984" style="font-size: 70.7%; font-family: MathJax_Main;">2</span></span></span><span style="display: inline-block; width: 0px; height: 2.295em;"></span></span></span></span><span style="display: inline-block; width: 0px; height: 3.989em;"></span></span></span></span><span style="display: inline-block; width: 0px; height: 4.426em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 4.304em; vertical-align: -3.408em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-181"> F_0 = 0\\ F_1 = 1,\\ F_n = F_{n-1}+F_{n-2} </script></p><p>In C:</p><h4 id="*fibonacci.c*"><a name="*fibonacci.c*" href="#*fibonacci.c*"></a><em>fibonacci.c</em></h4><pre><code data-origin="<pre><code>    // prints 10th fibonacci number
+    #include &amp;lt;stdio.h&amp;gt;
+
+    int fib (int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        return fib(n-1)+fib(n-2);
+    }
+
+    int main () {
+        printf(&quot;%d\n&quot;,fib(10));
+        return 0;
+    }
+</code></pre>">    // prints 10th fibonacci number
+    #include &lt;stdio.h&gt;
+
+    int fib (int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        return fib(n-1)+fib(n-2);
+    }
+
+    int main () {
+        printf("%d\n",fib(10));
+        return 0;
+    }
+</code></pre><p>Also, there is no easy way to get to this result, but the time complexity of this particular algorithm is <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-199-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-3099" style="width: 3.217em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.623em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.818em 1000em 3.146em -0.442em); top: -2.732em; left: 0em;"><span class="mrow" id="MathJax-Span-3100"><span class="mi" id="MathJax-Span-3101" style="font-family: MathJax_Math; font-style: italic;">O</span><span class="mo" id="MathJax-Span-3102" style="font-family: MathJax_Main;">(</span><span class="msubsup" id="MathJax-Span-3103"><span style="display: inline-block; position: relative; width: 1.059em; height: 0px;"><span style="position: absolute; clip: rect(1.902em 1000em 2.896em -0.442em); top: -2.732em; left: 0em;"><span class="mn" id="MathJax-Span-3104" style="font-family: MathJax_Main;">2</span><span style="display: inline-block; width: 0px; height: 2.732em;"></span></span><span style="position: absolute; top: -2.633em; left: 0.546em;"><span class="mi" id="MathJax-Span-3105" style="font-size: 70.7%; font-family: MathJax_Math; font-style: italic;">n</span><span style="display: inline-block; width: 0px; height: 2.24em;"></span></span></span></span><span class="mo" id="MathJax-Span-3106" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.732em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.353em; vertical-align: -0.372em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-199"> O(2^n)</script></span>. Which is bad. Real bad.</p><p>A better implementation of fibonacci would be as follows (it is only <span><span class="MathJax_Preview"></span><span class="MathJax" id="MathJax-Element-200-Frame" role="textbox" aria-readonly="true"><nobr><span class="math" id="MathJax-Span-3107" style="width: 2.683em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.186em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(1.818em 1000em 3.146em -0.442em); top: -2.732em; left: 0em;"><span class="mrow" id="MathJax-Span-3108"><span class="mi" id="MathJax-Span-3109" style="font-family: MathJax_Math; font-style: italic;">O</span><span class="mo" id="MathJax-Span-3110" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-3111" style="font-family: MathJax_Math; font-style: italic;">n</span><span class="mo" id="MathJax-Span-3112" style="font-family: MathJax_Main;">)</span></span><span style="display: inline-block; width: 0px; height: 2.732em;"></span></span></span><span style="border-left-width: 0em; border-left-style: solid; display: inline-block; overflow: hidden; width: 0px; height: 1.353em; vertical-align: -0.372em;"></span></span></nobr></span><script type="math/tex" id="MathJax-Element-200"> O(n) </script></span>)</p><pre><code data-origin="<pre><code>    int fib2(int n) {
+        int m = 1;
+        int k = 0;
+        int i;
+
+        for (i = 1; i &amp;lt;= n; i++) {
+            int tmp = m + k;
+            m = k;
+            k = tmp;
+        }
+        return m;
+    }
+</code></pre>">    int fib2(int n) {
+        int m = 1;
+        int k = 0;
+        int i;
+
+        for (i = 1; i &lt;= n; i++) {
+            int tmp = m + k;
+            m = k;
+            k = tmp;
+        }
+        return m;
+    }
+</code></pre><p>Hint. You need this for the exam.</p><h3 id="measuring-program-runtime"><a name="measuring-program-runtime" href="#measuring-program-runtime"></a>Measuring program runtime</h3><p>Say we want to measure how long it takes to for a certain function / program to run?<br>In C, a simple way to implement such a measurement is to use <code>time.h</code>‘s <code>clock()</code> funcion to get the “time” at the start of the thing you want to measure, and once more at the end.</p><p>NOTE: “time” is not real time usually, it’s some sort of “number of ticks” since some arbitrary event.</p><p>For example, say we want to measure out <code>fib()</code> function above:</p><pre><code data-origin="<pre><code>    #include &amp;lt;stdio.h&amp;gt;
+    #include &amp;lt;time.h&amp;gt;
+
+    // this is implicitly defined
+    // #define CLOCKS_PER_SEC 100000
+
+    int fib (int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        return fib(n-1)+fib(n-2);
+    }
+
+    int main () {
+        clock_t start = clock();
+        printf(&quot;%d\n&quot;, fib(37));
+        clock_t end = clock();
+        printf(&quot;%ld\n&quot;, (long int)(end-start)/CLOCKS_PER_SEC);
+        return 0;
+    }
+</code></pre>">    #include &lt;stdio.h&gt;
+    #include &lt;time.h&gt;
+
+    // this is implicitly defined
+    // #define CLOCKS_PER_SEC 100000
+
+    int fib (int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        return fib(n-1)+fib(n-2);
+    }
+
+    int main () {
+        clock_t start = clock();
+        printf("%d\n", fib(37));
+        clock_t end = clock();
+        printf("%ld\n", (long int)(end-start)/CLOCKS_PER_SEC);
+        return 0;
+    }
+</code></pre><h3 id="binary-search"><a name="binary-search" href="#binary-search"></a>Binary Search</h3><p>How can we efficiently search through a <em>sorted</em> array?</p><p>We can use a <strong>binary search algorithm</strong>!</p><ul>
+<li>Probe the middle element<ul>
+<li>if a[m] &gt; value, search left half</li><li>if a[m] &lt; value, search right half</li><li>if a[m] == value, return m</li></ul>
+</li></ul><p>Let’s make a function <code>int search(int a[], int n, int value)</code> that will return the position of the element if it is found in the array, or -1 otherwise:</p><h4 id="*binarysearch.c*"><a name="*binarysearch.c*" href="#*binarysearch.c*"></a><em>binarysearch.c</em></h4><pre><code data-origin="<pre><code>
+
+</code></pre>">
+
+</code></pre><h2 id="lecture-31"><a name="lecture-31" href="#lecture-31"></a>Lecture 31</h2>
 
 <footer style="position:fixed; font-size:.8em; text-align:right; bottom:0px; margin-left:-25px; height:20px; width:100%;">generated by <a href="http://pad.haroopress.com" target="_blank">haroopad</a></footer>
 </body>

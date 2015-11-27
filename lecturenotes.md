@@ -2708,3 +2708,93 @@ For example, you can tell `qsort` to sort integers by doing something like this:
 And you can just call `sort()`
 
 ## Lecture 30
+Nov 27th
+
+### Fibonacci Numbers
+Fibonacci numbers are defined as follows:
+$$$ F_0 = 0\\ F_1 = 1,\\ F_n = F_{n-1}+F_{n-2} $$$
+
+In C:
+#### *fibonacci.c*
+```
+    // prints 10th fibonacci number
+    #include <stdio.h>
+
+    int fib (int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        return fib(n-1)+fib(n-2);
+    }
+
+    int main () {
+        printf("%d\n",fib(10));
+        return 0;
+    }
+```
+
+Also, there is no easy way to get to this result, but the time complexity of this particular algorithm is $$$ O(2^n)$$$. Which is bad. Real bad.
+
+A better implementation of fibonacci would be as follows (it is only $$$ O(n) $$$)
+```
+	int fib2(int n) {
+        int m = 1;
+        int k = 0;
+        int i;
+
+        for (i = 1; i <= n; i++) {
+            int tmp = m + k;
+            m = k;
+            k = tmp;
+        }
+        return m;
+    }
+```
+Hint. You need this for the exam.
+
+### Measuring program runtime
+Say we want to measure how long it takes to for a certain function / program to run?
+In C, a simple way to implement such a measurement is to use `time.h`'s `clock()` funcion to get the "time" at the start of the thing you want to measure, and once more at the end.
+
+NOTE: "time" is not real time usually, it's some sort of "number of ticks" since some arbitrary event.
+
+For example, say we want to measure out `fib()` function above:
+```
+    #include <stdio.h>
+    #include <time.h>
+
+    // this is implicitly defined
+    // #define CLOCKS_PER_SEC 100000
+
+    int fib (int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        return fib(n-1)+fib(n-2);
+    }
+
+    int main () {
+        clock_t start = clock();
+        printf("%d\n", fib(37));
+        clock_t end = clock();
+        printf("%ld\n", (long int)(end-start)/CLOCKS_PER_SEC);
+        return 0;
+    }
+```
+
+### Binary Search
+How can we efficiently search through a *sorted* array?
+
+We can use a **binary search algorithm**!
+
+- Probe the middle element
+	- if a[m] > value, search left half
+	- if a[m] < value, search right half
+	- if a[m] == value, return m
+
+Let's make a function `int search(int a[], int n, int value)` that will return the position of the element if it is found in the array, or -1 otherwise:
+
+#### *binarysearch.c*
+```
+	
+```
+
+## Lecture 31
