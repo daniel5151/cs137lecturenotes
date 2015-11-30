@@ -21,7 +21,7 @@ That said, enjoy!
 
 ***Table of Contents:***
 
-<!--Insert Table of Contents below...-->
+[TOC]
 
 * * * *
 
@@ -2630,46 +2630,43 @@ It's uglier code, but it has better preformance.
 - swap when a[i] > P && a[j] < P
 - stop when i > j
 
-Here is the code Morton wrote on the board.*** It doesn't compile for me***, but this is letter for letter what was put up:
-
 #### *quicksort_hoare.c*
 ```
-	#include <stdio.h>
+    #include <stdio.h>
 
-    // swap helper
     void swap(int *a, int *b) {
         int t = *a;
         *a = *b;
         *b = t;
     }
 
-    void quick_sort(int a[], int left, int right) {
-        int p = a[left];
+    void quicksort(int a[], int left, int right) {
         int i = left, j = right;
+        int pivot = a[left];
 
-        while (i <= j) {
-            while (a[i] <= p) i++;
-            while (a[j] >= p) j--;
-
-            if (i <= j) swap(&a[i], &a[j]);
+        while(i <= j) {
+            while(a[i] < pivot) i++;
+            while(a[j] > pivot) j--;
+            if(i <= j) {
+                swap(&a[i],&a[j]);
+                i++; j--;
+            }
         }
 
-        swap(&a[left], &a[j]);
-
-        if (left < j) quick_sort(a,left,j);
-        if (right > i) quick_sort(a,i,right);
+        if(left < j) quicksort(a, left, j);
+        if(right > i) quicksort(a, i, right);
     }
 
-    int main (){
-        int a[] = {-10,2,14,-7,11,38};
-        int n = sizeof(a)/sizeof(a[0]);
+    int main() {
+        int a[] = { 2, -10, 14, 42, 11, -7, 0, 38 };
 
-        quick_sort(a,0,n);
+        quicksort(a, 0, sizeof(a)/sizeof(a[0]) - 1);
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < sizeof(a)/sizeof(a[0]); i++) {
             printf("%d, ", a[i]);
         }
         printf("\n");
+
         return 0;
     }
 ```
