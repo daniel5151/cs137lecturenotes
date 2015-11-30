@@ -2330,17 +2330,17 @@ Usually, we are only interested in the **worst case scenario**.
 
 ### Jargon!
 Sorted from leat to most complex:
- Big O    | Name
- -------- | ----
- O(1)     | constant time
- O(log n) | logarithmic
- O(n)     | linear
- O(n^2^)  | quadratic
- O(n^3^)  | cubic
- O(n^m^)  | polynomial
- O(c^n^)  | exponential
- O(n!)    | factorial
- O(n^n^)  | *write a new algorithm*
+ Big O            | Name
+ ---------------- | ----
+ $$$ O(1)     $$$ | constant time
+ $$$ O(log n) $$$ | logarithmic
+ $$$ O(n)     $$$ | linear
+ $$$ O(n^2)  $$$ | quadratic
+ $$$ O(n^3)  $$$ | cubic
+ $$$ O(n^m)  $$$ | polynomial
+ $$$ O(c^n)  $$$ | exponential
+ $$$ O(n!)    $$$ | factorial
+ $$$ O(n^n)  $$$ | *write a new algorithm*
 
 ## Lecture 25
 Nov 16th
@@ -2386,7 +2386,7 @@ https://www.youtube.com/watch?v=kPRA0W1kECg
     }
 ```
 
-This is a **O(n^2^)** algorithm. Why? Well, let's analyze it...
+This is a $$$O(n^2)$$$ algorithm. Why? Well, let's analyze it...
 
 - Entering the function, and initializing the outer loop will take **A** Time.
 - In the outer loop: 
@@ -2439,7 +2439,7 @@ $$$
     }
 ```
 
-This is also a **O(n^2^)** algorithm, but it *can* be **O(n)** sometimes!
+This is also a $$$O(n^2)$$$ algorithm, but it *can* be $$$O(n)$$$ sometimes!
 
 - Outer loop has n-1 interations
 - Inner loop has 0 -> i iterations
@@ -2525,7 +2525,7 @@ It is also a *recursive* algorithm
     }
 ```
 What is the time complexity of this algorithm?
-Well, it's actually **O(n log(n))**!
+Well, it's actually $$$ O(n log(n)) $$$!
 Why?
 
 Suppose $$$ n = 2^k $$$
@@ -2630,7 +2630,7 @@ It's uglier code, but it has better preformance.
 - swap when a[i] > P && a[j] < P
 - stop when i > j
 
-Here is the code Morton wrote on the board. IT doesn't compile for me, but this is letter for letter what was put up:
+Here is the code Morton wrote on the board.*** It doesn't compile for me***, but this is letter for letter what was put up:
 
 #### *quicksort_hoare.c*
 ```
@@ -2794,7 +2794,107 @@ Let's make a function `int search(int a[], int n, int value)` that will return t
 
 #### *binarysearch.c*
 ```
-	
+    #include <stdio.h>
+
+    int search(int a[], int n, int value) {
+        int l = 0,
+            h = n-1;
+
+        while (h >= l) {
+            int m = l+(h-l)/2; // or (h+l)>>1; becuase bitshifting
+            if (a[m] == value) return m;
+            if (a[m] < value) l = m+1;
+            if (a[m] > value) h = m-1;
+        }
+
+        return -1;
+    }
+
+    int main() {
+        int a[] = {-10,7,0,2,11,14,38,42};
+        printf("%d\n", search(a,sizeof(a)/sizeof(a[0]),10));    // -1
+        printf("%d\n", search(a,sizeof(a)/sizeof(a[0]),2));     // 3
+        printf("%d\n", search(a,sizeof(a)/sizeof(a[0]),42));    // 7
+        return 0;
+    }
 ```
 
+Evidently, the** Worst Case **time complexity is $$$ O(\log(n)) $$$ and the **Best Case** time complexity is $$$ O(1) $$$ (the midpoint is the correct element)
+
 ## Lecture 31
+Nov 30th
+
+### A Summary of Sorting Algorithms
+
+ Algorithm | Best Time           | Worst Time         | Extra Memory?
+ --------- | ------------------- | -------------------| -------------
+ Selection | $$$ O(n^2)      $$$ | $$$ O(n^2)      $$$| No
+ Insertion | $$$ O(n^2)      $$$ | $$$ O(n)        $$$| No
+ Merge     | $$$ O(n\log(n)) $$$ | $$$ O(n\log(n)) $$$| Yes
+ Quick     | $$$ O(n\log(n)) $$$ | $$$ O(n^2)      $$$| No
+
+### Linked Lists
+**NOTE: This is NOT on the final exam!**
+
+Recall our vector implementation, and how as the number of vectors outgrew the size of the array, the array doubled in size.
+This could be inneficient for frequent insertions mid list (for sparsley used vectors).
+Is there a better way of implementing an expanding array-like data structure?
+
+Well, obviously. It's called a **linked list!**
+
+<img src="http://www.java2novice.com/images/linked_list.png">
+
+We will implement a linked list to hold **polynomials** (vectors are done in an upper year CS course)
+
+So, let's say we want to store information about the polynomial **2x^3^ + 8x - 12**
+We can make a `struct` with 3 properties:
+1) `double` The coefficient
+2) `int` The degree
+3) `*poly` A pointer to the next element of the polynomial (NULL if end of the list)
+
+#### *poly.h*
+```
+    #ifndef POLY_H
+    #define POLY_H
+
+    typedef struct poly {
+        double c;
+        int d;
+        struct poly *next;
+    } poly;
+
+    poly   *polyCreate   ();
+    poly   *polyDelete   (poly *p);
+    poly   *polySetCoeff (poly *p, int deg, double coeff);
+    double  polyEval     (poly *p, double x); 
+
+    #endif
+```
+
+#### *main.c*
+```
+	#include <stdio.h>
+
+    #include "poly.h"
+
+    int main() {
+        poly *p = polyCreate();
+
+        p = polySetCoeff(p, 3, 3.0);
+        p = polySetCoeff(p, 0, 3.0);
+        p = polySetCoeff(p, 1, 3.0);
+
+        printf("%g\n", polyEval(p,-1)); // -3
+
+        p = polyDelete(p);
+
+        return 0;
+    }
+```
+
+#### *poly.c*
+```
+	stay tuned
+```
+
+## Lecture 32
