@@ -21,7 +21,7 @@ That said, enjoy!
 
 ***Table of Contents:***
 
-[TOC]
+<!--[TOC]-->
 
 * * * *
 
@@ -61,7 +61,7 @@ ECE 222 | How processors work
 
 ### First C Program:
 #### *hello.c*
-```
+```cpp
     #include <stdio.h>
 
     int main(void) {
@@ -139,7 +139,7 @@ This algorithm can be simply implemented in c as so:
 ----------------
 
 ####*gcd.c*
-```
+```cpp
     #include <stdio.h>
 
     int main(void) {
@@ -285,7 +285,7 @@ Sept 21st
 ### Book-keeping
 **Quiz 0** will be on Friday, at the start of class. It will be about **order of operations**
 Eg:
-```
+```cpp
 	a = 1;
     b = 2;
     c = 3;
@@ -299,7 +299,7 @@ Eg:
 ### Assignment
 let $$$ a = 806 $$$ and $$$ b = 338 $$$
 Take the following code sample:
-```
+```cpp
 	a = a + b; // 1144
     b = a / b; // 3
     b = b + 1  // 4
@@ -311,7 +311,7 @@ An interesting thing about the assinment operator: It has a return value!
 ### Compund Assignment
 We can rewrite `a = a + 2` as `a += 2`
 Similarly, for all other operations:
-```
+```cpp
 	a += 2;
     a -= 2;
     a *= 2;
@@ -328,7 +328,7 @@ Similarly, `a -= 1` can be rewritten as either `a--` or `--a`;
 
 Example of how pre and post decrement matter:
 let $$$ a = 806, b = 338 $$$
-```
+```cpp
 	a += ++b; // a = 1145, b = 339
     a += b++  // a = 1144, b = 2299
     a += --b  // a = 1143, b = 337
@@ -375,7 +375,7 @@ There are also:
 		* for `||`: if the **left** is **true**, the **right** is **not evaluated**
 
 	- Examples:
-    ```
+    ```cpp
         (100 > 700) || (2 >= 7)  // is True,  both ops were evaled
         (100 > 700) && (2 >= 7)  // is False, only the left op was evaled
         !(100 > 700) && (2 >= 7) // is False, both ops were evaled
@@ -470,13 +470,13 @@ We'll simply discuss if / else, read about switch yourself.
 If statements come in two forms:
 
 **Single If**
-```
+```cpp
 	if (expresson)
     	statement
 ```
 
 **If / Else**
-```
+```cpp
 	if (expresson)
     	statement
     else
@@ -485,7 +485,7 @@ If statements come in two forms:
 
 One can have **nested ifs**, but one must remember that if writing code without brackets, else will always match with the **nearest unmatched if**, ***regardless of indentation.***
 Example:
-```
+```cpp
 	int 0 = 3;
     if (i % 2 == 0)
     	if (i == 0)
@@ -494,7 +494,7 @@ Example:
     	printf("how odd\n");
 ```
 This code actually prints **nothing!** If you add brackets, you see why:
-```
+```cpp
 	int 0 = 3;
     if (i % 2 == 0) {
     	if (i == 0) {
@@ -508,7 +508,7 @@ This code actually prints **nothing!** If you add brackets, you see why:
 Another interesting thing to note: *C doesn't have an "else if" keyword!*
 How does C handle else if statements?
 The following example explains:
-```
+```cpp
 	// Without Brackets vs With Brackets
     
 	if (expr)           // if (expr) {
@@ -525,7 +525,7 @@ The following example explains:
 ### Compound statements
 **Brace Brackets** make one statement from 0, 1, 2, 3, ... expressions
 Example:
-```
+```cpp
 	if ( i == 0 )
     	printf("zero\n");
     else {
@@ -541,7 +541,7 @@ It is used in the following way. ` (condition) ? {if true} : {if false} `
 Essentially, it is a condensed if statement.
 
 Example:
-```
+```cpp
 	if (i > j)
     	printf("%d\n", i);
     else
@@ -556,7 +556,7 @@ True was 1, False was 0.
 In the C99 Specification, they added boolean values.
 
 They are used as such:
-```
+```cpp
 	#include <stdbool.h>
     
     int main (void) {
@@ -578,7 +578,7 @@ Sept 25th
 ### While Loop
 While loops execute **0 or more** times
 Example of a While loop:
-```
+```cpp
 	int r = a % b;
     while (r != 0) {
     	a = b;
@@ -590,7 +590,7 @@ Example of a While loop:
 ### Do While Loop
 Do While loops execute **1 or more** times
 Example of a Do While loop:
-```
+```cpp
 	do {
     	r = a % b;
         a = b;
@@ -600,7 +600,7 @@ Example of a Do While loop:
 
 ### Functions
 We can rewrite GCD as a function:
-```
+```cpp
 	int gcd (int a, int b){
     	int r = a % b;
         while (r != 0) {
@@ -613,7 +613,7 @@ We can rewrite GCD as a function:
 ```
 
 If we define this function in a program, we can then write something like this:
-```
+```cpp
 	#include <stdio.h>
 
     int gcd (int a, int b){
@@ -659,7 +659,7 @@ If `expr` evaluates to **false**, it terminates the program with a message stati
 Evidently, `assert` is supremely useful for debugging.
 
 Here is an example relevant to A2_02
-```
+```cpp
 	#include <assert.h>
     ...
     bool leap(int year) {
@@ -679,7 +679,7 @@ What if we want to compile a program from multiple files?
 Say we have 2 c files that depend on one another:
 
 #### *powers.c*
-```
+```cpp
 	/* Defines the functions */
     int square(int num) { return num * num; }
     int cube(int num) { return square(num) * num; }
@@ -689,7 +689,7 @@ Say we have 2 c files that depend on one another:
 ***Notice the lack of main!***
 
 #### *main.c*
-```
+```cpp
 	#include <stdio.h>
 
     /* Below we declare:
@@ -716,7 +716,7 @@ Header files declare functions (and a whole bunch of other stuff that we don't c
 
 For example, the `powers` program above could be rewritten to use a header file
 #### powers.h
-```
+```cpp
 	#ifndef POWERS_H  // For if we accidentally include a duplicate header file
         #define POWERS_H
         int square(int num);
@@ -727,12 +727,12 @@ For example, the `powers` program above could be rewritten to use a header file
 ```
 
 #### powers.c
-```
+```cpp
 	*** Stays the same ***
 ```
 
 #### main.c
-```
+```cpp
 	#include <stdio.h>
     #include "powers.h"
 
@@ -749,7 +749,7 @@ Recursion is having a function call itself.
 For example, let's rewrite gcd.c recursively:
 
 ####*gcdr.c*
-```
+```cpp
 	int gcd(int a, int b) {
     	if (b == 0) return a;
         return gcd(b, a % b);
@@ -759,7 +759,7 @@ Dayum. Ain't that short!
 
 ### Pass by Value
 Take the following code:
-```
+```cpp
 	void weird (int n) {
     	n = 17;
     }
@@ -827,7 +827,7 @@ The alogorithm works by starting with 2, marking it as prime, and then crossing 
 
 An implementation in C follows:
 ####*sieve.c*
-```
+```cpp
 	#include <stdio.h>
     void sieve(int a[], int n) {
         // a[] is variable sized, so we must also
@@ -870,7 +870,7 @@ An implementation in C follows:
 It is usually implemented at runtime (so variable length arrays don't play nicely with it)
 
 Take the following example:
-```
+```cpp
 	void strange(int a[], int n) {     // a is JUST A POINTER!
     	printf("%d\n", sizeof(a));     // Either 8 (or 4)
         							   // Depends of size of pointer implement
@@ -899,7 +899,7 @@ Oct 7th
 
 ### Array Pointers
 Look at this code:
-```
+```cpp
 	int a[5] = {0,1,2,3,4};
     printf("%lu\n", (unsigned long)a); // Prints "140737326347974"
 ```
@@ -913,7 +913,7 @@ Because `a` is just a pointer, we can rewrite functions that take arrays using *
 Keep in mind that even though you *can* use pointer notations, you *probably shouldn't*, as pointer notation usually obfuscates the nature of the function for those who have to look at it.
 
 Weird things happen when assigning arrays to other variables:
-```
+```cpp
 	void main () {
     	int a[] = {0,1,2,3,4};
         int *b = a;
@@ -927,7 +927,7 @@ a and b point to the **same** memory adress, so any edits to one affect the othe
 
 ### Multidimensional arrays
 Arrays within Arrays within Arrays, Oh my!
-```
+```cpp
 	int a[4][3] = {
     	{11,12,13},
         {21,22,23},
@@ -964,7 +964,7 @@ double      | 8 bytes  | ~16 digits | +-308
 long double | 16 bytes | ~31 digits | +-4931
 
 Look at the following code for an example of how to use floats:
-```
+```cpp
 	float z = 1.0f    // use float as type, and f to cast number as float
     double y = 1.0;   // not always neccessary to cast number when assigning
 
@@ -1019,7 +1019,7 @@ c) multiplying by very large numbers
 d) tests for equality
 
 Example of riskyness:
-```
+```cpp
 	double x = 5.0/6.0;
     double y = 1.0/2.0;
     double z = 1.0/3.0;
@@ -1031,7 +1031,7 @@ Example of riskyness:
 ```
 
 Smarter to rewrite it as:
-```
+```cpp
 	#define EPSILON 0.00001
 
     // can use fabs() instead of || below
@@ -1052,7 +1052,7 @@ Evaluating the polynomial is also pretty easy:
 
 ####*poly.c*
 
-```
+```cpp
     #include <stdio.h>
     #include <assert.h>
 
@@ -1093,7 +1093,7 @@ $$ f(x) = 2+x(9+x(4+3x)) $$
 
 We can leverage this fact to make a more efficient algorithm:
 #### *poly_h.c*
-```
+```cpp
     #include <stdio.h>
     #include <assert.h>
 
@@ -1124,7 +1124,7 @@ This implementation only has:
 Dat efficiency doe.
 
 ### Math.h Highlights
-```
+```cpp
 	#include <math.h>
 
     // Trig
@@ -1177,7 +1177,7 @@ Note: This algorithm only works accurately when there is only **one** root betwe
 Obviously, we can rewrite this algorithm in C:
 This program caluclates the root of the function $$$ f(x) = x - cos(x) $$$
 #### *bisect.c*
-```
+```cpp
 	#include <assert.h>
     #include <math.h>
     #include <stdio.h>
@@ -1243,7 +1243,7 @@ Note: ** THIS DOES NOT ALWAYS CONVERGE. **
 In C, this function is written as:
 
 #### *fixed.c*
-```
+```cpp
 	#include <assert.h>
     #include <math.h>
     #include <stdio.h>
@@ -1273,14 +1273,14 @@ Functions can be passed as arguments to other functions!
 So, if we want to pass a function like `double f(double x)` as a parameter, we would use the form `double (*f)(double)`
 
 Eg:
-```
+```cpp
 	double f(double x) { return x; }
 	double eval_func(double x, double (*h)(double)) { return h(x); }
 ```
 
 We can use this property to generalize `bisect()` to work with any function:
 
-```
+```cpp
 	double f0(double x) { return x*x-3; }
     double f1(double x) { return cos(x) - x; }
 
@@ -1306,7 +1306,7 @@ Structures (structs) are **compound data types**.
 They group several named member variables** together in memory**, so that they can all be accessed using just one name (pointer).
 
 A simple example would be a struct that holds the time of day (in 24h time):
-```
+```cpp
 	struct tod {
     	int hours;
         int minutes;
@@ -1314,7 +1314,7 @@ A simple example would be a struct that holds the time of day (in 24h time):
 ```
 
 Here is how one would actually use that struct in a program:
-```
+```cpp
 	void main() {
     	struct tod now = {16,50}; // or {.hours = 16, .minutes = 50};
         struct tod later;
@@ -1328,7 +1328,7 @@ Here is how one would actually use that struct in a program:
 ```
 
 We can also use structs as parameters:
-```
+```cpp
 	void todPrint(struct tod when) {
     	printf("%02d:%02d\n", when.hours, when.minutes);
     }
@@ -1340,7 +1340,7 @@ We can also use structs as parameters:
 ```
 
 Can we return structs? Hell yeah we can!
-```
+```cpp
 	struct tod todAddTime(struct tod when, int hours, int minutes) {
     	when.minutes += minutes;
         when.hours += hours + when.minutes / 60;
@@ -1359,7 +1359,7 @@ Can we return structs? Hell yeah we can!
 ```
 
 We can simplify declaring structs using **typedefs**:
-```
+```cpp
 	typedef struct {
     	int hours;
         int minutes;
@@ -1401,7 +1401,7 @@ While C99 added a complex numbers library, C89 does not have one, so programmers
 Let's write our own implementation. Why? Because.
 
 #### *cplex.h*
-```
+```cpp
 	#ifndef CPLEX.H
     #define CPLEX.H
 
@@ -1421,7 +1421,7 @@ Let's write our own implementation. Why? Because.
 ```
 
 #### *cplex.c*
-```
+```cpp
     #include <stdio.h>
 
     #include "cplex.h"
@@ -1448,7 +1448,7 @@ Let's write our own implementation. Why? Because.
 ```
 
 #### *cplexMain.c*
-```
+```cpp
 	#include "cplex.h"
 
     int main () {
@@ -1474,7 +1474,7 @@ Ah, another important note:
 **TL;DR**: It's better.
 
 #### *cplexMain.c*
-```
+```cpp
 	#include <complex.h>
     #include <stdio.h>
 
@@ -1586,14 +1586,14 @@ This is problematic as it "removes" probability from the web.
 Let's define the web as used in Lecture 17 Part 1 in C.
 
 First, we define a struct for each link:
-```
+```cpp
 	typedef struct {
     	int src, dst;
     } link;
 ```
 
 Now, we can make an Array of Links to represent the web:
-```
+```cpp
 	link l[] = {
     	{0,1}, {0,2},   // page X
         {1,0},          // page Y
@@ -1604,7 +1604,7 @@ Now, we can make an Array of Links to represent the web:
 Lets write a program to solve the system of equations!
 
 #### *pagerank.c*
-```
+```cpp
 	#include <stdio.h>
 
     typedef struct {
@@ -1668,7 +1668,7 @@ We write `p = &i`, where `&` **references** i, that is, it returns not the value
 Now that `p` points to the memory location of i, we can use `*p = 10` to chnge the value of `i` to `10`! That `*` **derefrences** the memory location that `p` contains.
 
 That's the gist of it, let's see an example:
-```
+```cpp
 	int i = 6;
     int *p;
 
@@ -1692,7 +1692,7 @@ Well, if you pass pointers to a function, that function is able to modify variab
 Take the following example:
 
 #### *swap.c*
-```
+```cpp
 	#include <stdio.h>
 
     void swap(int *p, int *q) {  // takes memory locations and derefs them
@@ -1717,7 +1717,7 @@ Well, we can have functions that return pointers.
 Here is an example:
 
 #### *largest.c*
-```
+```cpp
 	#include <stdio.h>
 
     int *largest(int a[], int n) {
@@ -1743,7 +1743,7 @@ There are a few different arithmetic operations we can preform on pointers:
 * We can subtract pointers from one another (so long as they are the same type)
 
 Example:
-```
+```cpp
 	int a[8] = {2,3,4,5,6,7,8,9};
     int *p, *p, *q, i;
 
@@ -1759,7 +1759,7 @@ We can also compare pointers using all the usual relational operators `>` `<` `=
 
 Here is an example that heavily employs pointer arithmetic:
 #### *sumarray.c*
-```
+```cpp
 	int sum (int a[], int n) {
     	int total = 0;
         for (int i = 0; i < n; i ++)  // OR: for (int *p = a; p < a + n; p++)
@@ -1774,7 +1774,7 @@ Now, here's something to challenge your brain a bit...
 ### ksplice pointer challenge
 What does this code print out?
 (assuming x points to memadress 100, and an int is length 4)
-```
+```cpp
 	$include <stdio.h>
     void main() {
     	int x[5];
@@ -1806,7 +1806,7 @@ ASCII is:
 In C, we can represent characters as their integer counterparts by enclosing the char in single appostrophes.
 
 Here is a sample piece of code to show off some properties of chars:
-```
+```cpp
 	char c = 'a'     // 97
     c = 65           // 'A'
     c += 2           // 'C'
@@ -1877,7 +1877,7 @@ stdlib.h defines the following function: `void *malloc(size_t size)`
 
 How are these functions useful?
 Well, let's look at an example:
-```
+```cpp
 	#include <stdlib.h>
     int *numbers(int n) {
     	int *p = (int *)malloc(n * sizeof (int));
@@ -1893,7 +1893,7 @@ Nov 6th
 
 ### Dynamic Storage Continued
 Let's actually call `numbers()` from a main:
-```
+```cpp
 	void main () {
     	int *q = numbers(100);
         printf("%d\n", q[50]); // Outputs 51
@@ -1920,7 +1920,7 @@ If you want to modify a string in some way, you have to manually write a functio
 As an example, let's write a function that counts how many times a given character `c` occurs in a string `s`
 
 #### *c_count.c*
-````
+```cpp
 	#include <stdio.h>
 
     int count(char *s, char c) {
@@ -1942,7 +1942,7 @@ As an example, let's write a function that counts how many times a given charact
         printf("%d\n",count(hi,'z')); // 0
         printf("%d\n",count(hi,'L')); // 0
     }
-````
+```
 
 ### string.h
 `<string.h>` is a helpful C library that implements some basic string manipulation and utility functions.
@@ -1975,7 +1975,7 @@ Here is a list of some helpful functions from the library:
 Let's write a new version of `strcat` that dynamically allocates enough memory to hold the contents of `s0` and `s1`
 
 #### *concat.c*
-```
+```cpp
 	#include <stdlib.h>
     #include <string.h>
 
@@ -2003,7 +2003,7 @@ Switch statements are an alternative to if statements.
 They are not as versitile, but they may improve code readability
 
 Switch statements are comprised of a few base parts:
-```
+```cpp
 	switch (expression) {  // evaluate expression
     	case expr1:        //   if expression has a value expr1...
         	statements...  //     do statements...
@@ -2018,7 +2018,7 @@ Switch statements are comprised of a few base parts:
 ```
 
 For example, we could write a program that prints out a standing based on a letter grade:
-```
+```cpp
 	void standing(char grade) {
     	switch (grade){
         	case 'A': printf("EXCEL\n"); break;
@@ -2037,7 +2037,7 @@ Nov 9th
 ### Switch Statements cont.
 Not including a `break;` at the end of a case will result in a "fall through" to the next case.
 As an example, we can write a function that takes a letter grade and prints "pass" or "fail"
-```
+```cpp
 	void passFail(char grade) {
     	switch (grade) {
         	case 'A':
@@ -2071,7 +2071,7 @@ We should check the return values of these functions to make sure they were succ
 What happens if we want to`malloc` a memory block to hold structs?
 Well, it works fine, but there is a weird syntax...
 Take the following example:
-```
+```cpp
     typedef struct {
         int hour, min;
     } tod;
@@ -2103,7 +2103,7 @@ We can make a special struct that has 3 fields:
 
 First, let's come up with an outline for what functions we want...
 #### *vectors.h*
-```
+```cpp
     #ifndef VECTOR_H
     #define VECTOR_H
         struct vector;
@@ -2122,7 +2122,7 @@ This practice is called *opaque structs*, i.e: we make it so that the user doesn
 
 Alright! Now, what behavior do we expect from using these functions?
 #### *vector_test.c*
-```
+```cpp
     #include <stdio.h>
     #include "vector.h"
 
@@ -2145,7 +2145,7 @@ Nov 11
 
 Okay, here is the actual implementation:
 #### *vectors.c*
-```
+```cpp
     #include <assert.h>
     #include <stdlib.h>
     #include "vector.h"
@@ -2295,7 +2295,7 @@ Well, we can use it to analyze the **efficiency of algorithms!**
 
 Take the following Linear Search Algorithm:
 It returns the index of the first occurance of a value in an array.
-```
+```cpp
 	int search(int a[], int n, int value) {
     	for (int i = 0; i < n; i++) {
         	if (a[i] == value) return i;
@@ -2358,7 +2358,7 @@ https://www.youtube.com/watch?v=kPRA0W1kECg
 <img src="http://www.programiz.com/sites/tutorial2program/files/Selection-sort-algorithm.jpg">
 
 #### *selection.c*
-```
+```cpp
 	#include <stdio.h>
 
     void selection_sort (int a[], int n) {
@@ -2412,7 +2412,7 @@ $$$
 <img src="http://interactivepython.org/runestone/static/pythonds/_images/insertionsort.png">
 
 #### *insertion.c*
-```
+```cpp
 	#include <stdio.h>
 
     void insertion_sort (int *a, int n) {
@@ -2462,7 +2462,7 @@ It is also a *recursive* algorithm
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Merge_sort_algorithm_diagram.svg/300px-Merge_sort_algorithm_diagram.svg.png">
 
 #### *merge.c*
-```
+```cpp
 	#include <stdio.h>
     #include <stdlib.h>
     #include <assert.h>
@@ -2561,7 +2561,7 @@ On the bring side, Wikipedia.org exists. And Google too!
 
 While I can't expain the algorthm, I can at least give you an implementation:
 #### *quick.c*
-```
+```cpp
 	#include <stdio.h>
     #include <stdlib.h>
     #include <assert.h>
@@ -2631,7 +2631,7 @@ It's uglier code, but it has better preformance.
 - stop when i > j
 
 #### *quicksort_hoare.c*
-```
+```cpp
     #include <stdio.h>
 
     void swap(int *a, int *b) {
@@ -2687,7 +2687,7 @@ In `stdlib.h` there is a function called `qsort` that is defined as follows:
 Essentially, `qsort` is a heneralized sorter that can sort any structure you give if so long as you specify the type of structure you are passing it, and how to comapre structure elements.
 
 For example, you can tell `qsort` to sort integers by doing something like this:
-```
+```cpp
 	#include <stdlib.h>
 
 	int compare(const void *a, const void *b) {
@@ -2713,7 +2713,7 @@ $$$ F_0 = 0\\ F_1 = 1,\\ F_n = F_{n-1}+F_{n-2} $$$
 
 In C:
 #### *fibonacci.c*
-```
+```cpp
     // prints 10th fibonacci number
     #include <stdio.h>
 
@@ -2732,7 +2732,7 @@ In C:
 Also, there is no easy way to get to this result, but the time complexity of this particular algorithm is $$$ O(2^n)$$$. Which is bad. Real bad.
 
 A better implementation of fibonacci would be as follows (it is only $$$ O(n) $$$)
-```
+```cpp
 	int fib2(int n) {
         int m = 1;
         int k = 0;
@@ -2755,7 +2755,7 @@ In C, a simple way to implement such a measurement is to use `time.h`'s `clock()
 NOTE: "time" is not real time usually, it's some sort of "number of ticks" since some arbitrary event.
 
 For example, say we want to measure out `fib()` function above:
-```
+```cpp
     #include <stdio.h>
     #include <time.h>
 
@@ -2790,7 +2790,7 @@ We can use a **binary search algorithm**!
 Let's make a function `int search(int a[], int n, int value)` that will return the position of the element if it is found in the array, or -1 otherwise:
 
 #### *binarysearch.c*
-```
+```cpp
     #include <stdio.h>
 
     int search(int a[], int n, int value) {
@@ -2818,8 +2818,8 @@ Let's make a function `int search(int a[], int n, int value)` that will return t
 
 Evidently, the** Worst Case **time complexity is $$$ O(\log(n)) $$$ and the **Best Case** time complexity is $$$ O(1) $$$ (the midpoint is the correct element)
 
-## Lecture 31
-Nov 30th
+## Lecture 31+32
+Nov 30th - Dec 2nd
 
 ### A Summary of Sorting Algorithms
 
@@ -2830,9 +2830,9 @@ Nov 30th
  Merge     | $$$ O(n\log(n)) $$$ | $$$ O(n\log(n)) $$$| Yes
  Quick     | $$$ O(n\log(n)) $$$ | $$$ O(n^2)      $$$| No
 
-### Linked Lists
-**NOTE: This is NOT on the final exam!**
+** NOTE: THIS IS THE END OF MATERIAL COVERED BY THE FINAL EXAM **
 
+### Linked Lists
 Recall our vector implementation, and how as the number of vectors outgrew the size of the array, the array doubled in size.
 This could be inneficient for frequent insertions mid list (for sparsley used vectors).
 Is there a better way of implementing an expanding array-like data structure?
@@ -2850,26 +2850,27 @@ We can make a `struct` with 3 properties:
 3) `*poly` A pointer to the next element of the polynomial (NULL if end of the list)
 
 #### *poly.h*
-```
+```cpp
     #ifndef POLY_H
     #define POLY_H
 
     typedef struct poly {
-        double c;
-        int d;
+        double coeff;
+        int deg;
         struct poly *next;
     } poly;
 
-    poly   *polyCreate   ();
-    poly   *polyDelete   (poly *p);
-    poly   *polySetCoeff (poly *p, int deg, double coeff);
-    double  polyEval     (poly *p, double x); 
+    poly   *polyCreate      ();
+    poly   *polyDelete      (poly *p);
+    poly   *polySetCoeff    (poly *p, int deg, double coeff);
+    double  polyEval        (poly *p, double x);
+    int     polyDegree      (poly *p);
 
     #endif
 ```
 
 #### *main.c*
-```
+```cpp
 	#include <stdio.h>
 
     #include "poly.h"
@@ -2890,8 +2891,81 @@ We can make a `struct` with 3 properties:
 ```
 
 #### *poly.c*
-```
-	stay tuned
+```cpp
+    #include <math.h>
+    #include <stdlib.h>
+
+    #include "poly.h"
+
+    poly *polyCreate() {
+        // init empty list
+        return 0;
+    }
+
+    poly *polyDelete(poly *p) {
+        while (p) {
+            poly *t = p;    // set to to point to p
+            p = p->next;    // set p to point to next element in ll
+            free(t);        // free origional p value
+        }
+        return p;
+    }
+
+    // Notice that p is passes *by value*
+    // so we can increment and modify p within this loop
+    // to our heart's content
+    double polyEval(poly *p, double x) {
+        double f = 0.0;     // value of the function
+
+        // iterate over the nodes(terms) and evaluate each appropriately
+        // Note: DO NOT USE p++! 
+        // Terms are (probably) not next to one another in memory
+        for (; p; p = p->next)
+            f += pow(x,p->deg)*p->coeff;
+
+        return f;
+    }
+
+    poly *polySetCoeff(poly *p, int deg, double coeff) {
+        // if empty list / insert at head
+        if (!p || deg > p->deg) {
+            poly *q = malloc(sizeof(poly));
+            q->coeff = coeff;
+            q->deg   = deg;
+            q->next  = p;
+            return q;
+        }
+
+        // find location to insert
+        poly *cur = p;
+        for (; cur->next && cur ->next->deg > deg; cur = cur->next);
+        // this for loop brings us to the correct place
+
+        // If we are not at the end of the list, and it is the same
+        // degree as the degree we want to set the coefficient of...
+        if (cur->next && cur->next->deg == deg) {
+            cur->next->coeff = coeff;
+        } 
+        // If we are at the end of the list, or there does not exit
+        // a node for the desired degree...
+        else {
+            poly *q = malloc(sizeof(poly));
+            q->coeff = coeff;
+            q->deg = deg;
+            // insert into the list (order of operations matters!)
+            // first, set q's next pointer to point to cur's next
+            q->next = cur->next;
+            // next, set cur's next point to point to q
+            cur->next = q;
+        }
+        return p;
+    }
+
+    // calculate degree of polynomial
+    int polyDegree (poly *p) {
+
+    }
+
 ```
 
-## Lecture 32
+## Lecture 33
