@@ -2865,6 +2865,7 @@ We can make a `struct` with 3 properties:
     poly   *polySetCoeff    (poly *p, int deg, double coeff);
     double  polyEval        (poly *p, double x);
     int     polyDegree      (poly *p);
+    poly   *polyReverse     (poly *p);
 
     #endif
 ```
@@ -2927,6 +2928,9 @@ We can make a `struct` with 3 properties:
     }
 
     poly *polySetCoeff(poly *p, int deg, double coeff) {
+        // ignore requests to set coeff to 0
+        if (!coeff) return p;
+
         // if empty list / insert at head
         if (!p || deg > p->deg) {
             poly *q = malloc(sizeof(poly));
@@ -2963,9 +2967,76 @@ We can make a `struct` with 3 properties:
 
     // calculate degree of polynomial
     int polyDegree (poly *p) {
-
+        if (p == 0) return 0;   // behavior agreed upon beforehand
+        return p->deg;          // because ll are listed automagically
     }
 
+    // reverse a linked list
+    // THIS BREAKS OTHER FUNCTIONS
+    // IT'S JUST A GENERAL IMPLEMENTATION
+    // THEY ASK THIS ON INTERVIEWS
+    poly *polyReverse(poly *p) {
+        poly *q = 0; // reverse list that starts empty
+        while(p) {
+            // remember p->next
+            poly *next = p->next;
+            // insert the next node of the old list
+            // into the head of the reversed list
+            p->next = q;
+            q = p;
+            p = next;
+        }
+        return q;
+    }
 ```
 
 ## Lecture 33
+Dec 2nd
+
+### Makefiles
+Why type long commands to compile programs when you can just make a makefile, type `make` into your terminal, and boom bam alakazam, your program is compiled!
+
+Lets make a Makefile for our poly linked list program:
+
+#### *Makefile*
+```makefile
+	poly: main.c poly.c poly.h         # target: prerequisites
+		gcc -o poly poly.c main.c -lm  # recipe
+    clean:
+    	rm -f poly
+```
+
+Here is another Makefile...
+#### *Makefile*
+```makefile
+	# Variables
+    CC = gcc
+    CFLAGS = -g -std=c99                 # -g for debugging info
+    LIBS = -lm
+
+    default: poly
+    cplex: cplexMain.c cplex.c cplex.h
+    poly: main.c poly.c poly.h
+    %:%.c
+    	$(CC) $(FLAGS) -o $@ $^ $(LIBS)  # $@ is target name
+    PHONY: clean
+    clean:
+    	rm -f foly cplex
+```
+
+How does this thing work? Great question reader, one that I would love an answer to!
+This is just what Morty wrote verbatim
+
+### Random sidenote!
+There is a little difference between the following two lines:
+```cpp
+    const char *c;
+    char * const c;
+```
+
+Line one states that we cannot modify **the value** that the pointer `c` points to.
+Line two states that we cannot modify **the actual pointer** `c`.
+
+# That's it. Good luck on the final.
+Hope these notes helped :D
+\- *Daniel Prilik*
