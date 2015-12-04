@@ -399,6 +399,8 @@ These operators have their own precedence table:
 
 Example: `i + j < k || ~k == 1` $$$ \Longleftrightarrow $$$ `((i+j) < k) || ((!k) == 1)`
 
+* * *
+
 ## Lecture 5
 Sept. 22nd
 
@@ -571,6 +573,8 @@ They are used as such:
         return 0;
     }
 ```
+
+* * *
 
 ## Lecture 6
 Sept 25th
@@ -3036,6 +3040,137 @@ There is a little difference between the following two lines:
 
 Line one states that we cannot modify **the value** that the pointer `c` points to.
 Line two states that we cannot modify **the actual pointer** `c`.
+
+## What's on the exam?
+
+Know the following aspects of the language:
+
+- Fundamentals (vars, types, expressions, if else, loops, switch, printf scanf, etc)
+	- Ch. 2-7 | think quiz 1
+- Arrays and Initializers
+	- Ch. 8.1
+- Pointers, arrays, pointer arithmetic
+	- Ch 11-12
+- Strings, strlen, strcpy, strcat, strcmp
+	- Ch. 13
+- Header files (how to do seperate compilation)
+	- Ch. 15
+- Structures (params, return types, arrays of / within structs)
+	- Ch. 16.1, 16.2
+- Dynamic Memory (malloc, free, realloc, calloc), function pointers, qsort
+	- Ch. 17.1-17.4,17.7
+- math.h
+	- Ch. 23.3
+- assert.h
+	- Ch. 24.1
+- Unicode
+	- Ch. 25.2
+
+Know the following algorithms:
+
+- Euclid's Algoritm (GCD)
+- Sieve of Eratosthenes (primes)
+- Horner's Method (eval. polynomials)
+- Bisection (root finding)
+- Pagerank (fixed-point iteration) FORMULA GIVEN
+- Sorting:
+	- Selection
+		- best = worst = O(n^2^)
+	- Insertion
+		- best = O(n), worst = O(n^2^)
+	- Merge Sort
+		- best = worst = O(n log(n))
+	- Quicksort (only need to memorize one partitioner) (assume p=a[0])
+		- best = (n log(n))
+		- worst = O(n^2^)
+- Searching
+	- Linear
+		- O(n)
+	- Binary
+		- O(log(n))
+- Fibonacci Sequence (Linear)
+
+Other stuff:
+
+- Rounding
+- Big O (How to compute and which are fastest)
+
+## Format of the exam
+Closed Book, no Calculators
+20-26 questions, 4 marks each
+
+Before each question, there will be a collection of symbols that mark what type of material the question covers (i.e: A for assert, B for Bisection, etc...)
+
+## Exam Review
+### Question 1
+The quicksort algorithm has three steps:
+1) pick a point, 2) partiton the array, 3) sort each partition recursively
+
+Let `int a[0] = {5,6,4,7,3,8,2}`
+
+If a[0] is the pivot, show a[] after initial partitoning
+
+### Answer 1
+```
+	5,6
+    5,4,6
+    5,4,6,7
+    5,4,3,7,6
+    5,4,3,7,6,8
+    5,4,3,7,6,8,7
+    2,4,3,5,6,8,7
+```
+
+### Question 2
+Approximately how many times will a binary search probe a sorted array of size 1mil when searching for a value that is not in the array?
+A) 20
+B) 1000
+C) 2
+D) 1mil
+E) Binary search only works with unsorted array
+
+### Answer 2
+It's A.
+2^10^ = 1024
+2^20^ = 1024*1024 approx 1mil
+
+### Question 3
+The greek character `zeta` has the unicode codepoint value of 150 (decimal), which is 1110110110 in binary
+
+What is the UTF-8 encoding of this character?
+
+### Answer 3
+```
+	110 01110 10 110110
+```
+### Question 4
+Recall that `qsort` is defined as
+`void qsort(void *base, size_t n, size_t size, int (*compare)(const void *a, const void *b));`
+
+Implement a function `void sort(struct tod a[], int n)` that invokes qsort to sort an array of time-of-day structs `struct tod {int hour, minute;}`
+You will need to define the compare function.
+
+### Answer 4
+```cpp
+	#include <stdlib.h>
+
+	int compare(const void *_a, const void *_b) {
+    	struct tod a = (struct tod *) _a;
+        struct tod b = (struct tod *) _b;
+        return (60*a.hour + a.minute)
+             - (60*b.hour + b.minute);
+    }
+
+	void sort(struct tod a[], int n) {
+    	qsort(a,n,sizeof(struct tod),compare);
+    }
+```
+
+### Question 5 - Harder end of the spectrum
+Implement a function `int zeroes(int n);` that return the number of trailing zeroes at the end of n!. Assume n>=1.
+
+### Answer 5
+Do it yourself!
 
 # That's it. Good luck on the final.
 Hope these notes helped :D
