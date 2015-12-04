@@ -21,7 +21,7 @@ That said, enjoy!
 
 ***Table of Contents:***
 
-<!--[TOC]-->
+[TOC]
 
 * * * *
 
